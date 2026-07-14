@@ -43,7 +43,7 @@ to sync changes from `upstream` because all pull requests get pushed to the `mai
 branch in the `upstream` repository. 
 Instead, create a feature branch from main as follows:
 
-# When contributing via your fork
+## When contributing via your fork
 
 First, sync your `main` branch, as shown above. Then create your feature branch from `main`:
 
