@@ -24,3 +24,12 @@
 - water_pipeline/   : GPR fitting scripts + MLCP input files + Morse_water.dat
 - methanol_pipeline/: Morse_methanol.dat (12 modes, full omega convention)
 - hcl_validation/   : HCl read-morse-tanh validation (exact match confirmed)
+
+## Day 17 Updates (July 21, 2026)
+- GPR centering fix: shift q so MOPAC minimum -> q=0; mode 1 SOP RMSE 435->45 cm-1
+- Residual coupling: V_2D - V_1D_i - V_1D_j on uniform +-0.40 Bohr grid
+  - Pair (1,2): RMSE=2.23, max_coeff=28 cm-1
+  - Pair (1,3): RMSE=0.15, max_coeff=1.2 cm-1 (nearly zero)
+  - Pair (2,3): RMSE=2.93, max_coeff=29 cm-1
+- All pairwise 2-mode MLCP runs validated, no overflow
+- 3-mode overflow remains (mode 2 De~70k cm-1 expected per Dr Thomas)
