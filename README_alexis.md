@@ -33,3 +33,11 @@
   - Pair (2,3): RMSE=2.93, max_coeff=29 cm-1
 - All pairwise 2-mode MLCP runs validated, no overflow
 - 3-mode overflow remains (mode 2 De~70k cm-1 expected per Dr Thomas)
+
+## FINAL RESULT (July 21, 2026)
+Full 3-mode water pipeline working end-to-end:
+- GPR centering fix (q_shift per mode)
+- Residual coupling: V_2D - V_1D_i - V_1D_j on uniform +-0.40 Bohr grid
+- MLCP with truncation layer (9->5 per mode, 40 combined)
+- Result: ZPVE=3827, FUND v1=1440, FUND v2=3561, FUND v3=2710 cm-1
+- No overflow, all levels physical, delta~1e-9
