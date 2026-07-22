@@ -1,0 +1,20 @@
+$control
+system='h2o'
+pes_path='/home/testing/pes'
+rs='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0'
+$end-control
+
+$resort
+ 1 2 3
+$end-resort
+
+$basis
+ 9          9         9 
+      9           9 
+            40
+$end-basis
+
+$layers
+2   1
+  2
+$end-layers

@@ -1,0 +1,21 @@
+$control
+system='h2o'
+rs='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0'
+$end-control
+
+$resort
+ 1 2 3
+$end-resort
+
+$basis
+ 9          9         9
+            40
+$end-basis
+
+$layers
+3
+$end-layers
+
+$node
+layer-mode='2-1' algo='1'
+$end-node

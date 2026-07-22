@@ -1,0 +1,17 @@
+START h2o
+geometry units angstroms
+ O       0.0  0.0  1.0
+ H       1.0  0.0  0.0
+ H       -1.0  0.0  0.0
+END
+BASIS
+ H library sto-3g
+ O library sto-3g
+END
+SCF
+ rhf
+ PRINT low
+END
+TASK scf optimize
+SCF; PRINT none; END
+TASK scf freq

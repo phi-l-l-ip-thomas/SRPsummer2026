@@ -1,0 +1,50 @@
+$control
+system='napht' psirank='32' ncycle='20'
+rs='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 2 2022 20 21 13 0'
+$end-control
+
+# Resort section: desired order of modes on layer 1, to allow
+# arbitrary mode-combination schemes. The numbers entered in
+# the basis and layers sections apply to the resorted order
+
+$resort
+ 1  2 37 38 17 18 29 30    3  4  5 39 40 19 20 31 32   21 41 33  7 35  8  6 42 22 34   43 23  9 36 24 44   25 10 45 14 26 11 46 15   27 12 16 47 28 13 48
+$end-resort
+
+# Basis section: number of basis functions per DOF/mode
+# first line: primitive basis for individual DOFs
+# subsequent lines: basis for modes which combine DOFs
+
+$basis
+#  C-H stretch modes          C-C stretch modes         Rocking and ring breathing     in-plane skeletal      out-of-plane C-H        out-of-plane skel
+#  495 -> all v=4             220 -> all v=3            286 -> all v=2                 210/462 all v4/v5      165/495 -> all v3/v4    120/330 -> v3/v4
+99 99 99 99 99 99 99 99   99 99 99 99 99 99 99 99 99   99 99 99 99 99 99 99 99 99 99   99 99 99 99 99 99   99 99 99 99 99 99 99 99   99 99 99 99 99 99 99
+10 10 10 10 10 10 10 10   12 12 12 12 12 12 12 12 12   16 16 16 20 20 20 16 16 16 16   20 20 24 24 24 24   20 20 20 20 24 24 24 24   24 24 30 30 30 32 32
+ 100   100   100   100    12  144   144   144   144    16  256   400  20  256   256     400   576   576     400   400   576   576     576  30  900   1024
+  55    55    55    55    12   78    55    55    55    16   55    91  20   55    55      60    68    83      55    55    55    55      78  30   78   136
+     70          70          84      55       70          84        83        70           114       83         70          70           107      300
+     70          70              126          70              105             70           114       83         70          70           107      300
+          495                          220                           286                       462                   495                     420
+128
+$end-basis
+
+# Layers section: number of DOFs/modes to combine from previous layer
+# The first (primitive basis) layer is implied, with 1,1,...,1, so
+# input begins with the second layer
+
+$layers
+1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1 1 1   1 1 1 1 1 1   1 1 1 1 1 1 1 1   1 1 1 1 1 1 1
+ 2   2   2   2    1  2   2   2   2    1  2   2  1  2   2     2   2   2     2   2   2   2     2  1  2   2
+ 1   1   1   1    1  1   1   1   1    1  1   1  1  1   1     1   1   1     1   1   1   1     1  1  1   1
+   2       2        2    1     2        2      2     2         2     1       2       2         2     2
+   1       1          2        1           2         1         1     1       1       1         1     1
+       2                   2                    2                 2              2                2
+6
+$end-layers
+
+# Node section: must include layer-mode='<layer>-<mode>'. Set any
+# solver settings which differ from defaults or $control settings here
+
+$node
+layer-mode='8-1' psirank='256' algo='1'
+$end-node

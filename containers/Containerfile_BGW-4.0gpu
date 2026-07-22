@@ -1,0 +1,262 @@
+FROM nvcr.io/nvidia/nvhpc:24.1-devel-cuda_multi-ubuntu22.04
+WORKDIR /opt
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN \
+    apt-get update        &&   \
+    apt-get install --yes      \
+        build-essential        \
+        autoconf               \
+        cmake                  \
+        gfortran               \
+        libblas-dev            \
+        liblapack-dev          \
+        liblapacke-dev         \
+        libnetcdf-mpi-dev      \
+        libnetcdff-dev         \
+        libpnetcdf-dev         \
+        flex                   \
+        bison                  \
+        apbs                   \
+        libicu-dev             \
+        libbz2-dev             \
+        libboost-all-dev       \
+        libgmp-dev             \
+        bc                     \
+        automake               \
+        lsb-core               \
+        libgsl-dev             \
+        libxml2-dev            \
+        git                    \
+        unzip                  \
+        libsz2                 \
+        zlib1g                 \
+        zlib1g-dev             \
+        libaec-dev             \
+        ocaml-findlib          \
+        ocaml                  \
+        ocamlbuild             \
+        indent                 \
+        libtool                \
+        fig2dev                \
+        texinfo                \
+        ghostscript            \
+        libnum-ocaml           \
+        libnum-ocaml-dev       \
+        curl                   \
+        vim                    \
+        wget              &&   \
+    apt-get clean all
+ENV LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
+
+# Install libfabric
+ARG libfabric_version=1.20.0
+RUN wget -q https://github.com/ofiwg/libfabric/archive/v${libfabric_version}.tar.gz \
+    && tar xf v${libfabric_version}.tar.gz \
+    && cd libfabric-${libfabric_version} \
+    && ./autogen.sh \
+    && ./configure --prefix=/opt/libfabric-${libfabric_version}/install  --enable-efa=no \
+    && make -j 4 \
+    && make install \
+    && ldconfig \
+    && cd .. \
+    && rm -rf v${libfabric_version}.tar.gz
+ENV PATH=$PATH:/opt/libfabric-${libfabric_version}/install/bin
+ENV PATH=$PATH:/opt/libfabric-${libfabric_version}/install/lib
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/libfabric-${libfabric_version}/install/lib
+    
+# Installing MPICH with cuda based on recipe from https://github.com/pmodels/mpich/issues/6576
+ARG mpich=4.1.1
+ARG mpich_prefix=mpich-$mpich
+RUN \
+    wget https://www.mpich.org/static/downloads/$mpich/$mpich_prefix.tar.gz && \
+    tar xvzf $mpich_prefix.tar.gz                                           && \
+    cd $mpich_prefix                                                        && \
+    ./configure --prefix=/opt/$mpich_prefix/install --enable-fast=O2 --with-pm=no \
+     --with-wrapper-dl-type=rpath --enable-threads=multiple --enable-shared=yes \
+     --enable-static=no --with-device=ch4:ofi --with-libfabric=/opt/libfabric-${libfabric_version}/install \
+     --with-cuda=/opt/nvidia/hpc_sdk/Linux_x86_64/24.1/cuda CC=nvc CXX=nvc++ \
+     FC=nvfortran F77=nvfortran NVCC=nvc++ NVCC_FLAGS=-allow-unsupported-compiler \
+     MPICHLIB_CFLAGS=-fPIC MPICHLIB_CXXFLAGS=-fPIC                          && \
+    make -j 4                                                               && \
+    make install                                                            && \
+    make clean                                                              && \
+    cd ..                                                                    && \
+    rm -rf $mpich_prefix.tar.gz
+RUN /sbin/ldconfig
+ENV PATH=$PATH:/opt/$mpich_prefix/install/bin
+ENV PATH=$PATH:/opt/$mpich_prefix/install/lib
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/$mpich_prefix/install/lib
+RUN ln -vfns /opt/$mpich_prefix/install /opt/nvidia/hpc_sdk/Linux_x86_64/24.1/comm_libs/mpi
+RUN which mpicc
+RUN update-alternatives --install /usr/local/mpi mpi /opt/$mpich_prefix/install 100
+
+# Install miniconda
+ENV installer=Miniconda3-py39_4.12.0-Linux-x86_64.sh
+RUN wget https://repo.anaconda.com/miniconda/$installer && \
+    /bin/bash $installer -b -p /opt/miniconda3          && \
+    rm -rf $installer
+ENV PATH=/opt/miniconda3/bin:$PATH
+RUN conda install -y numpy scipy matplotlib setuptools mpi4py
+
+# Install OpenBLAS 
+WORKDIR /opt
+RUN git clone -b v0.3.25 https://github.com/OpenMathLib/OpenBLAS.git OpenBLAS && \
+    cd /opt/OpenBLAS                                                          && \
+    make TARGET=ZEN                                                           && \
+    make install PREFIX=/opt/OpenBLAS/install
+ENV PATH=$PATH:/opt/OpenBLAS/install/bin
+ENV PATH=$PATH:/opt/OpenBLAS/install/include
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/OpenBLAS/install/lib
+
+# Install FFTW
+WORKDIR /opt
+RUN git clone https://github.com/FFTW/fftw3.git fftw3                       && \
+    cd fftw3                                                                && \
+    sed -i '25d' bootstrap.sh                                               && \
+    sed -i '25i ./configure --enable-shared --enable-maintainer-mode \
+              --enable-openmp \
+              --enable-threads --prefix=/opt/fftw3/install $*' bootstrap.sh && \
+    sh bootstrap.sh                                                         && \
+    make -j 4                                                               && \
+    make install
+ENV PATH=$PATH:/opt/fftw3/install/bin
+ENV PATH=$PATH:/opt/fftw3/install/lib
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/fftw3/install/lib
+
+# Install HDF5
+WORKDIR /opt
+RUN git clone -b hdf5_1_14_3 https://github.com/HDFGroup/hdf5.git hdf5      
+RUN cd hdf5                                                                 && \
+    mkdir build                                                             && \
+    cd build                                                                && \
+    cmake -G "Unix Makefiles" -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx \
+          -DCMAKE_Fortran_COMPILER=mpif90 \
+          -DCMAKE_BUILD_TYPE:STRING=Release -DBUILD_SHARED_LIBS:BOOL=ON \
+          -DBUILD_TESTING:BOOL=ON -DHDF5_BUILD_TOOLS:BOOL=ON -DHDF5_BUILD_FORTRAN:BOOL=ON \
+          -DHDF5_ENABLE_PARALLEL=ON -D CMAKE_INSTALL_PREFIX=/opt/hdf5/install ../ && \
+    cmake --build . --config Release                                        && \
+    cpack -C Release CPackConfig.cmake                                      && \
+    make -j 4                                                               && \
+    make install
+ENV PATH=$PATH:/opt/hdf5/install/bin
+ENV PATH=$PATH:/opt/hdf5/install/lib
+ENV PATH=$PATH:/opt/hdf5/install/include
+ENV PATH=$PATH:/opt/hdf5/install/share
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/hdf5/install/lib
+
+ENV PATH=$PATH:/opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/bin
+ENV PATH=$PATH:/opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/include
+ENV PATH=$PATH:/opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/lib
+ENV CUDALIB='/usr/local/cuda/lib64'
+ENV HDF5_DIR='/opt/hdf5/install'
+ENV FFTW_DIR='/opt/fftw3/install/lib'
+ENV FFTW_INC='/opt/fftw3/install/include'
+
+# Install ScaLAPACK
+WORKDIR /opt
+RUN git clone https://github.com/scivision/scalapack.git                      && \
+    cd /opt/scalapack                                                         && \
+    mkdir build                                                               && \
+    cd /opt/scalapack/build                                                   && \
+    cmake -DCMAKE_INSTALL_PREFIX=/opt/scalapack/install \
+          -DCMAKE_C_COMPILER=mpicc -DCMAKE_C_FLAGS="-fPIC" \
+          -DCMAKE_Fortran_COMPILER=mpif90 -DCMAKE_Fortran_FLAGS="-fPIC" \
+          -DBUILD_COMPLEX=ON -DBUILD_COMPLEX16=ON ../                         && \
+    make -j 4                                                                 && \
+    make install 
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/scalapack/install/lib
+
+# Install ELPA
+WORKDIR /opt
+ARG elpa=2023.11.001
+ARG elpa_prefix=elpa-$elpa
+RUN curl -L https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/2023.11.001/elpa-2023.11.001.tar.gz \
+    --output $elpa_prefix.tar.gz                                          && \
+    tar xvzf $elpa_prefix.tar.gz --no-same-owner                          && \
+    rm -r $elpa_prefix.tar.gz
+RUN cd /opt/$elpa_prefix                                                  && \
+    mkdir build                                                           && \
+   ./configure --prefix=/opt/$elpa_prefix/build FC=mpif90 CC=mpicc CXX=mpicxx \
+   FCFLAGS="-fast -fPIC " CFLAGS="-fast -pgf90libs -fPIC " CPP="cpp -E "     \
+   LDFLAGS="-L/opt/scalapack/install/lib -L/opt/nvidia/hpc_sdk/Linux_x86_64/24.1/math_libs/lib64" \
+   --enable-c-tests=yes --enable-cpp-tests=yes -enable-sse-assembly --enable-sse \
+   --enable-avx --enable-avx2 --enable-nvtx=no --enable-nvidia-gpu \
+   --with-NVIDIA-GPU-compute-capability=sm_80 --enable-nvidia-sm80-gpu-kernels \
+   --enable-gpu-streams=nvidia --enable-scalapack-tests=yes --disable-avx512 \
+   --with-cuda-path=/opt/nvidia/hpc_sdk/Linux_x86_64/24.1/cuda --disable-mpi-module --disable-timings && \
+   make -j 4                                                        && \
+   make install
+
+# Install PRIMME
+WORKDIR /opt
+RUN git clone https://github.com/primme/primme.git                       && \
+    cd primme                                                            && \ 
+    make lib CC=mpicc CFLAGS='-fast -mp' FC=mpif90
+
+# Install BerkeleyGW: GPU version 4.0
+WORKDIR /opt
+ARG bgw=4.0
+ARG bgw_prefix=BerkeleyGW-$bgw
+RUN curl -L https://app.box.com/shared/static/22edl07muvhfnd900tnctsjjftbtcqc4.gz \
+         --output $bgw_prefix.tar.gz                                        && \
+    tar xvzf $bgw_prefix.tar.gz --no-same-owner                             && \
+    rm -r $bgw_prefix.tar.gz
+RUN ln -vfns /opt/hdf5/install/lib/libhdf5_hl_f90cstub.so.310.0.3 /opt/hdf5/install/lib/libhdf5hl_fortran.so
+RUN cd $bgw_prefix                                                          && \
+    cp config/perlmutter.nvhpc.gpu.nersc.gov.mk arch.mk                     && \
+    sed -i -e 's/ftn/mpif90/g' arch.mk                                      && \
+    sed -i '23d' arch.mk                                                    && \
+    sed -i '23i FCPP    = /usr/bin/cpp -C -nostdinc ' arch.mk               && \
+    sed -i '32d' arch.mk                                                    && \
+    sed -i '32i CC_COMP = mpicxx' arch.mk                                   && \
+    sed -i '33d' arch.mk                                                    && \
+    sed -i '33i C_COMP = mpicc' arch.mk                                     && \
+    sed -i '34d' arch.mk                                                    && \
+    sed -i '34i C_LINK = mpicc -lstdc++' arch.mk                            && \
+    sed -i '40d' arch.mk                                                    && \
+    sed -i '40i #FFTW_DIR = ' arch.mk                  && \
+    sed -i '41d' arch.mk                                                    && \
+    sed -i '41i FFTWLIB = $(FFTW_DIR)/libfftw3.a \\' arch.mk               && \
+    sed -i '42d' arch.mk                                                    && \
+    sed -i '42i $(FFTW_DIR)/libfftw3_threads.a \\' arch.mk                 && \
+    sed -i '43d' arch.mk                                                    && \
+    sed -i '43i $(FFTW_DIR)/libfftw3_omp.a \\' arch.mk                     && \
+    sed -i '44d' arch.mk                                                    && \
+    sed -i '44i ${CUDALIB} -lstdc++' arch.mk                                && \
+    sed -i '45d' arch.mk                                                    && \
+    sed -i '45i FFTWINCLUDE  = /opt/fftw3/install/include ' arch.mk         && \
+    sed -i -e 's/CUDALIB= -lcufft/CUDALIB= #-lcufft/g' arch.mk              && \
+    sed -i '48d' arch.mk                                                    && \
+    sed -i '48i SCALAPACKLIB = /opt/scalapack/install/lib/libscalapack.a /opt/scalapack/install/lib/libblacs.a' arch.mk && \
+    sed -i '49d' arch.mk                                                    && \
+    sed -i '49i LAPACKLIB    = /opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/lib/liblapack.so /opt/nvidia/hpc_sdk/Linux_x86_64/24.1/compilers/lib/libblas.so' arch.mk && \
+    sed -i '52d' arch.mk                                                    && \
+    sed -i '52i HDF5LIB      =  $(HDF5_LDIR)/libhdf5_hl_fortran.a \\' arch.mk && \
+    sed -i '53d' arch.mk                                                    && \
+    sed -i '53i $(HDF5_LDIR)/libhdf5_hl.a $(HDF5_LDIR)/libhdf5_hl_f90cstub.a \\' arch.mk                      && \
+    sed -i '54d' arch.mk                                                    && \
+    sed -i '54i $(HDF5_LDIR)/libhdf5_fortran.a $(HDF5_LDIR)/libhdf5_f90cstub.a \\' arch.mk                 && \
+    sed -i '55d' arch.mk                                                    && \
+    sed -i '55i $(HDF5_LDIR)/libhdf5.a $(HDF5_LDIR)/libhdf5_tools.a -lz -ldl' arch.mk                   && \
+    sed -i '15d' arch.mk                                                    && \
+    sed -i '15i MATHFLAG  = -DUSESCALAPACK -DUNPACKED -DUSEFFTW3 -DHDF5 -DOMP_TARGET -DOPENACC -DUSEELPA -DUSEELPA_GPU -DUSEPRIMME' arch.mk && \
+    sed -i '59d' arch.mk                                                    && \
+    sed -i '59i ELPALIB     = /opt/elpa-2023.11.001/build/lib/libelpa.a -lstdc++' arch.mk && \
+    sed -i '60d' arch.mk                                                    && \
+    sed -i '60i ELPAINCLUDE = /opt/elpa-2023.11.001/build/include/elpa-2023.11.001/modules/' arch.mk && \
+    sed -i '62d' arch.mk                                                    && \
+    sed -i '62i PRIMMELIB = /opt/primme/lib/libprimme.a' arch.mk && \
+    sed -i '63d' arch.mk                                                    && \
+    sed -i '63i PRIMMEINC = /opt/primme/include/' arch.mk && \
+    make cleanall                                                           && \
+    make all-flavors
+ENV PATH=$PATH:/opt/$bgw_prefix/bin
+
+#RUN cd /opt/$bgw_prefix/testsuite                                           && \
+#    make check-parallel | tee test.out
+
+# Starting directory
+RUN mkdir /home/bgw-user
+WORKDIR /home/bgw-user
+

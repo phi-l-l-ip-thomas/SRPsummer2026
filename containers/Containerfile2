@@ -1,0 +1,137 @@
+FROM nvcr.io/nvidia/cuda:12.3.2-devel-ubuntu22.04
+WORKDIR /opt
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN \
+    apt-get update        &&   \
+    apt-get install --yes      \
+    apbs                   \
+    autoconf               \
+    automake               \
+    bc                     \
+    bison                  \
+    build-essential        \
+    cmake                  \
+    curl                   \
+    fig2dev                \
+    flex                   \
+    g++                    \
+    gcc                    \
+    ghostscript            \
+    gfortran               \
+    git                    \
+    indent                 \
+    libaec-dev             \
+    libblas-dev            \
+    libboost-all-dev       \
+    libbz2-dev             \
+    libfftw3-dev           \
+    libgmp-dev             \
+    libgsl-dev             \
+    libhdf5-mpi-dev        \
+    libicu-dev             \
+    liblapack-dev          \
+    liblapacke-dev         \
+    libnetcdf-mpi-dev      \
+    libnetcdff-dev         \
+    libnum-ocaml           \
+    libnum-ocaml-dev       \
+    libpnetcdf-dev         \
+    libssl-dev             \
+    libsz2                 \
+    libtool                \
+    libxml2-dev            \
+    lsb-core               \
+    ocaml                  \
+    ocaml-findlib          \
+    ocamlbuild             \
+    pkg-config             \
+    tar                    \
+    texinfo                \
+    unzip                  \
+    vim                    \
+    wget                   \
+    zlib1g                 \
+    zlib1g-dev          && \    
+    apt-get clean all
+ENV LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
+
+# Install MPICH (required for perlmutter, check recipe version)
+ARG mpich=4.2.2
+ARG mpich_prefix=mpich-$mpich
+RUN \
+    wget https://www.mpich.org/static/downloads/$mpich/$mpich_prefix.tar.gz && \
+    tar xvzf $mpich_prefix.tar.gz                                           && \
+    cd $mpich_prefix                                                        && \
+    ./configure FFLAGS=-fallow-argument-mismatch FCFLAGS=-fallow-argument-mismatch && \
+    make -j 16                                                              && \
+    make install                                                            && \
+    make clean                                                              && \
+    cd ..                                                                   && \
+    rm -rf $mpich_prefix
+RUN /sbin/ldconfig
+
+# Install miniconda (working)
+ENV installer=Miniconda3-py39_24.5.0-0-Linux-x86_64.sh
+RUN wget https://repo.anaconda.com/miniconda/$installer && \
+    /bin/bash $installer -b -p /opt/miniconda3          && \
+    rm -rf $installer
+ENV PATH=${PATH}:/opt/miniconda3/bin
+RUN conda install -y numpy scipy matplotlib setuptools mpi4py
+
+# Install Rust
+WORKDIR /opt
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    mkdir -p rust && \
+    mv /root/.cargo ./rust/cargo && \
+    mv /root/.rustup ./rust/rustup
+ENV CARGO_HOME=/opt/rust/cargo
+ENV RUSTUP_HOME=/opt/rust/rustup
+ENV PATH=/opt/rust/cargo/bin:${PATH}
+
+# Install MOPAC
+WORKDIR /opt
+RUN git clone https://github.com/openmopac/mopac.git
+RUN cd mopac && \
+    mkdir build && \
+    cd build && \
+    # activate micromamba env + install numpy (and other python modules)
+    cmake .. -DPython3_EXECUTABLE=/opt/miniconda3/bin/python && \
+    make
+ENV PATH=/opt/mopac/build:${PATH}
+
+# Install pbqfff (with FC output)
+WORKDIR /opt
+RUN git clone --branch brent/print-fcs https://github.com/ntBre/pbqff.git
+RUN cd pbqff && \
+    cargo build --release && \
+    # indirectly through target/release/pbqff **had --features vers but that didnt work
+    ln -sf $(realpath target/release/pbqff) ${PREFIX}/pbqff && \
+    cargo install --path crates/pbqff/
+ENV PATH=/opt/pbqff:${PATH}
+
+# Test MOPAC
+RUN mkdir /home/testing && \
+    cd /home/testing
+
+WORKDIR /home/testing
+COPY pbh2o/intder.in .
+COPY pbh2o/h2o.toml .
+COPY pbc3h2/c3h2.toml .
+COPY h2omopac.inp .
+COPY pbc3h2/params.dat .
+
+# Resolve queuing issue with exec location
+RUN mv /opt/mopac/build/mopac /opt/mopac
+ENV RUST_BACKTRACE=full
+ENV RUST_LOG=debug
+
+# # Install MLCP
+# WORKDIR /opt
+# RUN git clone https://github.com/phi-l-l-ip-thomas/mlcp.git
+# RUN cd mlcp && \
+#     bash install
+
+RUN pbqff -o h2o.toml
+# Starting directory
+CMD ["/bin/bash"]

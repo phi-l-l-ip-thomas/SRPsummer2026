@@ -1,0 +1,102 @@
+FROM nvcr.io/nvidia/nvhpc:24.5-devel-cuda12.4-ubuntu22.04
+# nvcr.io/nvidia/cuda:12.9.2-cudnn-devel-ubuntu24.04
+# registry.nersc.gov/library/nersc-env/nersc-zen3-a100-ofi:0.5-devel-ubuntu24.04
+WORKDIR /opt
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN \
+    apt-get update        &&   \
+    apt-get install --yes      \
+    apbs                   \
+    autoconf               \
+    automake               \
+    bc                     \
+    bison                  \
+    build-essential        \
+    cmake                  \
+    curl                   \
+    fig2dev                \
+    flex                   \
+    g++                    \
+    gcc                    \
+    ghostscript            \
+    gfortran               \
+    git                    \
+    indent                 \
+    libaec-dev             \
+    libblas-dev            \
+    libboost-all-dev       \
+    libbz2-dev             \
+    libfftw3-dev           \
+    libgmp-dev             \
+    libgsl-dev             \
+    libhdf5-mpi-dev        \
+    libicu-dev             \
+    liblapack-dev          \
+    liblapacke-dev         \
+    libmunge-dev           \
+    libnetcdf-mpi-dev      \
+    libnetcdff-dev         \
+    libnum-ocaml           \
+    libnum-ocaml-dev       \
+    libpnetcdf-dev         \
+    libssl-dev             \
+    libsz2                 \
+    libtool                \
+    libxml2-dev            \
+    lsb-release            \
+    ocaml                  \
+    ocaml-findlib          \
+    ocamlbuild             \
+    pkg-config             \
+    slurm-client           \
+    tar                    \
+    texinfo                \
+    unzip                  \
+    vim                    \
+    wget                   \
+    zlib1g                 \
+    zlib1g-dev          && \    
+    apt-get clean all
+ENV LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
+
+# Install MPICH (required for perlmutter, check recipe version)
+ARG mpich=4.2.2
+ARG mpich_prefix=mpich-$mpich
+RUN \
+    wget https://www.mpich.org/static/downloads/$mpich/$mpich_prefix.tar.gz && \
+    tar xvzf $mpich_prefix.tar.gz                                           && \
+    cd $mpich_prefix                                                        && \
+    ./configure  && \
+    # FFLAGS=-fallow-argument-mismatch FCFLAGS=-fallow-argument-mismatch
+    make -j 16                                                              && \
+    make install                                                            && \
+    make clean                                                              && \
+    cd ..                                                                   && \
+    rm -rf $mpich_prefix
+RUN /sbin/ldconfig
+
+# Install miniconda (working)
+ENV installer=Miniconda3-py39_24.5.0-0-Linux-x86_64.sh
+RUN wget https://repo.anaconda.com/miniconda/$installer && \
+    /bin/bash $installer -b -p /opt/miniconda3          && \
+    rm -rf $installer
+ENV PATH=/opt/miniconda3/bin:$PATH
+RUN conda install -y numpy scipy matplotlib setuptools mpi4py
+
+# Update CMake
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.29.6/cmake-3.29.6-linux-x86_64.tar.gz && \
+    tar xzf cmake-3.29.6-linux-x86_64.tar.gz && \
+    export PATH=/opt/cmake-3.29.6-linux-x86_64/bin:$PATH
+
+# WORKDIR /opt
+# RUN wget https://github.com/SchedMD/slurm/releases/download/slurm-26-05-0-1/slurm-26.05.0.tar.bz2 & \
+#     tar -xaf slurm-26.05.0.tar.bz2 && \
+#     rm -rf slurm-26.05.0.tar.bz2 && \
+#     cd slurm-26.05.0 && \
+#     ./configure --prefix=/slurm && \
+#     make install && \
+#     ldconfig -n /usr/lib
+#     # podman-hpc run --rm -it -v /usr/bin/sbatch:/usr/bin/sbatch:ro -v /usr/bin/srun:/usr/bin/srun:ro -v /usr/bin/scontrol:/usr/bin/scontrol:ro -v /usr/lib64/slurm:/usr/lib64/slurm:ro working
+#     # podman-hpc build -f ./containers/Containerfile_env -t env . && podman-hpc build -f ./containers/Containerfile_working -t working . && podman-hpc migrate working
+# ENV PATH=/opt/slurm*/sbin:$PATH

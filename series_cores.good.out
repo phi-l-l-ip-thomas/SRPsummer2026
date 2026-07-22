@@ -1,0 +1,102 @@
+chmod: changing permissions of '/workspace/inputs/h2o_vscf.nw': Operation not permitted
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+
+Running MLCP pipeline...
+Processing inputs...
+Reading input parameters from file: /workspace/inputs/sample.inp
+Generating PBQFF input file
+Generating NWChem input file
+Generating MLCP input file
+Running PBQFF...
+Running qfflist2.py to read force constants from file: pbqff.out
+Reading harmonic force constants from file: pbqff.out
+Found harmonic force constants in file: pbqff.out
+Finished reading harmonic force constants from file: pbqff.out
+Reading cubic force constants from file: pbqff.out
+Found cubic force constants in file: pbqff.out
+Finished reading cubic force constants from file: pbqff.out
+Reading quartic force constants from file: pbqff.out
+Found quartic force constants in file: pbqff.out
+Finished reading quartic force constants from file: pbqff.out
+Running NWChem...
+Running nwchem_fc.py to read force constants from file: nwc_h2o.out
+Reading harmonic force constants from file: nwc_h2o.out
+Found NWChem harmonic force constants in file: nwc_h2o.out
+Finished reading NWChem harmonic force constants from file: nwc_h2o.out
+Processing intermediaries and running MLCP...
+Reading NWChem geometry from file: <_io.TextIOWrapper name='../nwchem/nwc_h2o.out' mode='r' encoding='UTF-8'>
+Found NWChem optimization in file: <_io.TextIOWrapper name='../nwchem/nwc_h2o.out' mode='r' encoding='UTF-8'>
+Found NWChem optimized geometry in file: <_io.TextIOWrapper name='../nwchem/nwc_h2o.out' mode='r' encoding='UTF-8'>
+Finished reading NWChem geometry from file: <_io.TextIOWrapper name='../nwchem/nwc_h2o.out' mode='r' encoding='UTF-8'>
+Reading PBQFF geometry from file: <_io.TextIOWrapper name='../pbqff/pbqff.out' mode='r' encoding='UTF-8'>
+Found PBQFF optimized geometry in file: <_io.TextIOWrapper name='../pbqff/pbqff.out' mode='r' encoding='UTF-8'>
+Finished reading PBQFF geometry from file: <_io.TextIOWrapper name='../pbqff/pbqff.out' mode='r' encoding='UTF-8'>
+nwc_points: 3
+pbqff_points: 3
+
+[2170.02, 4140.26, 4391.32]
+[[ 0.050952 -0.235735  0.000044]
+ [-0.119301 -0.145304 -0.145458]
+ [ 0.        0.       -0.25004 ]
+ [-0.409998 -0.234424  0.000044]
+ [-0.66817  -0.143745 -0.145458]
+ [ 0.        0.        0.      ]
+ [-0.409279 -0.234427  0.000044]
+ [ 0.43017  -0.146855 -0.145458]
+ [ 0.        0.        0.      ]]
+[[-0.1124  0.6806  0.6832]
+ [ 0.6653  0.0001  0.1489]
+ [-0.     -0.     -0.    ]
+ [ 0.182  -0.2155 -0.0906]
+ [-0.2378 -0.1649  0.1184]
+ [ 0.      0.     -0.    ]
+ [-0.6127  0.1779 -0.3223]
+ [ 0.2823  0.6569 -0.6205]
+ [ 0.     -0.      0.    ]]
+[[ 0.185308  0.221032 -0.079801]
+ [ 0.011736 -0.111975 -0.005884]
+ [-0.05153  -0.035703  0.025641]]
+
+[[ 0.050952 -0.235735  0.000044]
+ [-0.119301 -0.145304 -0.145458]
+ [ 0.        0.       -0.25004 ]
+ [-0.409998 -0.234424  0.000044]
+ [-0.66817  -0.143745 -0.145458]
+ [ 0.        0.        0.      ]
+ [-0.409279 -0.234427  0.000044]
+ [ 0.43017  -0.146855 -0.145458]
+ [ 0.        0.        0.      ]]
+[2170.02, 4140.26, 4391.32]
+
+[1 0 2]
+[[-0.235735  0.050952  0.000044]
+ [-0.145304 -0.119301 -0.145458]
+ [ 0.        0.       -0.25004 ]
+ [-0.234424 -0.409998  0.000044]
+ [-0.143745 -0.66817  -0.145458]
+ [ 0.        0.        0.      ]
+ [-0.234427 -0.409279  0.000044]
+ [-0.146855  0.43017  -0.145458]
+ [ 0.        0.        0.      ]]
+[4140.26 2170.02 4391.32]
+Generating final harmonic FCs...
+Completed MLCP pipeline!
+
+Running MLCP pipeline...
+chmod: changing permissions of '/workspace/inputs/h2o_vscf.nw': Operation not permitted
+Running test suite...
+mkdir: cannot create directory '/workspace/simulations': File exists
+mkdir: cannot create directory 'napthalene': File exists
+mkdir: cannot create directory 'pbqff': File exists
+mkdir: cannot create directory 'nwchem': File exists
+mkdir: cannot create directory 'mlcp': File exists
+Processing inputs...
+Reading input parameters from file: /workspace/inputs/napthalene.inp
+Generating PBQFF input file
+Generating NWChem input file
+Generating MLCP input file
+Running PBQFF...
+[2026-07-20T23:58:50.486] error: *** STEP 56233489.0 ON nid003885 CANCELLED AT 2026-07-20T23:58:50 DUE TO TIME LIMIT ***
+[2026-07-20T23:58:50.487] error: *** JOB 56233489 ON nid003885 CANCELLED AT 2026-07-20T23:58:50 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.

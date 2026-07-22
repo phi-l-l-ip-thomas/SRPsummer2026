@@ -1,0 +1,17 @@
+[iter 0 2026-05-26 15:33:29 0.0 CPU s] 0 jobs remaining
+finished dropping after 0.0 s
+finished dropping after 0.0 s
+0.0 s reading ok, 0.0 s writing input, 0.0 s writing script, 0.1 s submitting, 1.0 s sleeping, 0.0 s removing
+total optimize time: 0.0 sec
+[iter 0 2026-05-26 15:33:51 3.0 CPU s] 10352 jobs remaining
+[iter 1 2026-05-26 15:34:10 3.8 CPU s] 8752 jobs remaining
+[iter 2 2026-05-26 15:34:29 4.5 CPU s] 7152 jobs remaining
+[iter 3 2026-05-26 15:34:50 5.4 CPU s] 5552 jobs remaining
+[iter 4 2026-05-26 15:35:09 6.2 CPU s] 3952 jobs remaining
+[iter 5 2026-05-26 15:35:28 6.9 CPU s] 2352 jobs remaining
+[iter 6 2026-05-26 15:35:48 7.7 CPU s] 752 jobs remaining
+[iter 7 2026-05-26 15:36:00 8.2 CPU s] 0 jobs remaining
+finished dropping after 0.0 s
+finished dropping after 0.0 s
+0.1 s reading ok, 1.3 s writing input, 1.8 s writing script, 1123.1 s submitting, 8.0 s sleeping, 0.0 s removing
+total job time: 529.0 sec

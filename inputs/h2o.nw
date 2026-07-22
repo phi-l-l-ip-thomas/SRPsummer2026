@@ -1,0 +1,20 @@
+ geometry = """
+ O       0.0  0.0  1.0
+ H       1.0  0.0  0.0
+ H       -1.0  0.0  0.0
+"""
+
+START h2o_freq
+TITLE "H2O - STO-3G optimization + HF frequencies"
+END
+BASIS
+ H library sto-3g
+ O library sto-3g
+END
+SCF
+ rhf
+ PRINT low
+END
+TASK scf optimize
+SCF; PRINT none; END
+TASK scf freq
