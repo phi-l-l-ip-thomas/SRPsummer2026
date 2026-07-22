@@ -1,0 +1,13 @@
+{
+  "base_url": "/",
+  "hostname": "localhost",
+  "password": false,
+  "pid": 139064,
+  "port": 8888,
+  "root_dir": "/home/kaibstrings",
+  "secure": false,
+  "sock": "",
+  "token": "050dc795b00af8e2def363fcd615e2ad195a409698776699",
+  "url": "http://localhost:8888/",
+  "version": "2.17.0"
+}

@@ -1,0 +1,21 @@
+  label: euchre, content: can the upcard ever be the left bower
+  label: euchre, content: when would the dealer ever prefer a card to the upcard
+  label: euchre, content: bob played the same card twice is he cheating
+  label: euchre, content: how to remove a card from players hand
+  label: euchre, content: anyone want to play some euchre
+  label: calculator, content: how to assert rational invariants
+  label: calculator, content: does stack need its own big three
+  label: calculator, content: valgrind memory error not sure what it means
+trained on 8 examples
+
+test data:
+  correct = euchre, predicted = euchre, log-probability score = -13.7
+  content = my code segfaults when bob is the dealer
+
+  correct = euchre, predicted = calculator, log-probability score = -12.5
+  content = no rational explanation for this bug
+
+  correct = calculator, predicted = calculator, log-probability score = -13.6
+  content = countif function in stack class not working
+
+performance: 2 / 3 posts predicted correctly

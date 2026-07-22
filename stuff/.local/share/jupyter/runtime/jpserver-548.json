@@ -1,0 +1,13 @@
+{
+  "base_url": "/",
+  "hostname": "localhost",
+  "password": false,
+  "pid": 548,
+  "port": 8888,
+  "root_dir": "/home/kaibstrings/physics401",
+  "secure": false,
+  "sock": "",
+  "token": "d29c92203eaacc3daa5f0cdecf5ae8b684afa7f84f658179",
+  "url": "http://localhost:8888/",
+  "version": "2.17.0"
+}
