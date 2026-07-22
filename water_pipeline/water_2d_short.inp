@@ -1,0 +1,25 @@
+$control
+system='water'
+pes_path='/global/u1/a/alexisr/p2d'
+pe_transform='read-morse-tanh'
+dividefc='F'
+verbosity='2'
+rs='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0'
+$end-control
+
+$resort
+ 1 2 3
+$end-resort
+
+$basis
+ 9          9         9
+            40
+$end-basis
+
+$layers
+3
+$end-layers
+
+$node
+layer-mode='2-1' algo='0'
+$end-node
