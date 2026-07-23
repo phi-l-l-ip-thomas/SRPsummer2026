@@ -1,0 +1,72 @@
+# System Name
+system_name = h2o
+
+# Geometry
+ O       0.0  0.0  1.0  
+ H       1.0  0.0  0.0  
+ H       -1.0  0.0  0.0
+--
+
+# PBQFF Input
+charge = 0
+optimize = true
+coord_type = "sic"
+findiff = false
+step_size = 0.005
+program = "mopac"
+queue = "local"
+template = "scfcrt=1.D-21 aux(precision=14 comp xp xs xw) PM7 THREADS=1"
+job_limit = 100
+chunk_size = 8
+sleep_int = 2
+check_int = 0
+-- 
+# Intder.in
+# INTDER ##########################
+    3    3    3    0    0    3    0    0    0    1    0    0    0    1    1    0
+STRE     1    2
+STRE     1    3
+BEND     2    1    3
+    1   1   1.000000000   2   1.000000000
+    2   3   1.000000000
+    3   1   1.000000000   2  -1.000000000
+    0
+--
+
+# NWChem Input
+BASIS  
+ H library sto-3g  
+ O library sto-3g  
+END  
+SCF  
+ rhf
+ PRINT low  
+END
+TASK scf optimize
+SCF; PRINT none; END
+TASK scf freq
+--
+
+# MLCP Input
+$control
+system='h2o'
+rs='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0'
+$end-control
+
+$resort
+ 1 2 3
+$end-resort
+
+$basis
+ 9          9         9 
+            40
+$end-basis
+
+$layers
+3
+$end-layers
+
+$node
+layer-mode='2-1' algo='1'
+$end-node
+--

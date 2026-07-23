@@ -1,0 +1,171 @@
+ *******************************************************************************
+ **                                                                           **
+ **                              MOPAC v23.2.5                                **
+ **                                                                           **
+ *******************************************************************************
+ ** MOPAC's Digital Object Identifier: https://doi.org/10.5281/zenodo.6511958 **
+ **                                                                           **
+ ** Please cite the open-source release paper for use of this MOPAC version:  **
+ ** J. E. Moussa and J. J. P. Stewart (2026)                                  **
+ ** MOPAC: An open-source semiempirical molecular orbital program             **
+ ** J. Open Source Softw., 11(119), 8025, https://doi.org/10.21105/joss.08025 **
+ *******************************************************************************
+
+                              PM7 CALCULATION RESULTS
+
+ *******************************************************************************
+ *  CALCULATION DONE: (MAX THREADS = 1)              Mon Jul 20 23:37:17 2026  *
+ *  PM7        - The PM7 Hamiltonian to be used
+ *
+ *
+ *
+ *                 CHARGE ON SYSTEM = 0
+ *
+ *
+ *
+ *  XYZ        - CARTESIAN COORDINATE SYSTEM TO BE USED
+ *  1SCF       - DO 1 SCF AND THEN STOP 
+ *  THREADS=1  - MULTI-THREADING NOT USED
+ *  T=         - A TIME OF 172800.0 SECONDS REQUESTED
+ *  DUMP=N     - RESTART FILE WRITTEN EVERY 7200.0 SECONDS REQUESTED
+ *  SCFCRT     - DEFAULT SCF CRITERION REPLACED BY   0.100E-20
+ *  AUX        - OUTPUT AUXILIARY INFORMATION
+ *******************************************************************************
+scfcrt=1.D-21 aux(precision=14 comp xp xs xw) PM7 THREADS=1 charge=0 1SCF XYZ
+ Comment line 1
+ Comment line 2
+   ATOM   CHEMICAL          X               Y               Z
+  NUMBER   SYMBOL      (ANGSTROMS)     (ANGSTROMS)     (ANGSTROMS)
+
+     1       O         -0.00007059  *  -0.06480017  *  -0.00000000  *
+     2       H         -0.75920107  *   0.51963977  *   0.00000000  *
+     3       H          0.75532135  *   0.51378600  *   0.00000000  *
+
+
+
+          CARTESIAN COORDINATES 
+
+    NO.       ATOM           X           Y           Z
+
+     1         O         -0.0001     -0.0648     -0.0000
+     2         H         -0.7592      0.5196      0.0000
+     3         H          0.7553      0.5138      0.0000
+
+ General Reference for PM7:
+ "Optimization of Parameters for Semiempirical Methods VI: More Modifications to the 
+ NDDO Approximations and Re-optimization of Parameters", J. J. P. Stewart, J. Mol. Mod., 1:32, 19 (2013)
+ https://link.springer.com/article/10.1007/s00894-012-1667-x
+
+           Empirical Formula: H2 O  =     3 atoms
+
+
+
+      MOLECULAR POINT GROUP   :   C2v 
+
+
+      RHF CALCULATION, NO. OF DOUBLY OCCUPIED LEVELS = 4
+
+  SCF CRITERION =    0.1000E-20
+
+
+   THERE IS A RISK OF INFINITE LOOPING WITH THE SCFCRT LESS THAN 1.D-12
+
+ -------------------------------------------------------------------------------
+ scfcrt=1.D-21 aux(precision=14 comp xp xs xw) PM7 THREADS=1 charge=0 1SCF XYZ
+ Comment line 1
+ Comment line 2
+
+
+     1SCF WAS SPECIFIED, SO BFGS WAS NOT USED                 
+     SCF FIELD WAS ACHIEVED                                   
+
+
+                              PM7 CALCULATION
+                                                       MOPAC v23.2.5 Linux
+                                                       Mon Jul 20 23:37:17 2026
+
+
+
+
+          FINAL HEAT OF FORMATION =        -57.79034 KCAL/MOL =    -241.79477 KJ/MOL
+
+
+          COSMO AREA              =         42.46 SQUARE ANGSTROMS
+          COSMO VOLUME            =         25.19 CUBIC ANGSTROMS
+
+          IONIZATION POTENTIAL    =         12.115200 EV
+          HOMO LUMO ENERGIES (EV) =        -12.115  4.059
+          NO. OF FILLED LEVELS    =          4
+          MOLECULAR WEIGHT        =         18.0152         POINT GROUP:  C2v 
+
+          MOLECULAR DIMENSIONS (Angstroms)
+
+            Atom       Atom       Distance
+            H     3    H     2     1.51453
+            H     2    O     1     0.58150
+            O     1    H     2     0.00000
+
+
+          SCF CALCULATIONS        =          1
+
+          WALL-CLOCK TIME         =      0.141 SECONDS
+          COMPUTATION TIME        =      0.015 SECONDS
+
+
+
+
+   ATOM   CHEMICAL          X               Y               Z
+  NUMBER   SYMBOL      (ANGSTROMS)     (ANGSTROMS)     (ANGSTROMS)
+
+     1       O         -0.00007059  *  -0.06480017  *  -0.00000000  *
+     2       H         -0.75920107  *   0.51963977  *   0.00000000  *
+     3       H          0.75532135  *   0.51378600  *   0.00000000  *
+
+                             CARTESIAN COORDINATES
+
+   1    O       -0.000070588    -0.064800173    -0.000000000
+   2    H       -0.759201065     0.519639766     0.000000000
+   3    H        0.755321352     0.513785996     0.000000000
+
+
+           Empirical Formula: H2 O  =     3 atoms
+
+
+
+      MOLECULAR POINT GROUP   :   C2v 
+
+
+                  EIGENVALUES  
+ -29.64161 -17.82122 -14.23494 -12.11520   4.05861   6.34282
+
+
+              NET ATOMIC CHARGES AND DIPOLE CONTRIBUTIONS
+
+  ATOM NO.   TYPE          CHARGE      No. of ELECS.   s-Pop       p-Pop       
+    1          O          -0.647606        6.6476     1.81382     4.83379
+    2          H           0.324369        0.6756     0.67563
+    3          H           0.323238        0.6768     0.67676
+ DIPOLE           X         Y         Z       TOTAL
+ POINT-CHG.    -0.010     1.809     0.000     1.809
+ HYBRID         0.002     0.324    -0.000     0.324
+ SUM           -0.008     2.133    -0.000     2.133
+
+
+          ATOMIC ORBITAL ELECTRON POPULATIONS
+
+     Atom    s        px        py        pz   
+    1  O   1.81382   1.35135   1.48244   2.00000
+    2  H   0.67563
+    3  H   0.67676
+
+ **********************
+ *                    *
+ * JOB ENDED NORMALLY *
+ *                    *
+ **********************
+
+
+
+ TOTAL JOB TIME:             0.17 SECONDS
+
+ == MOPAC DONE ==

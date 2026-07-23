@@ -1,0 +1,36 @@
+START h2o_vscf
+TITLE "H2O - geometry opt + harmonic frequencies + VSCF anharmonic PES"
+END
+
+BASIS
+H library sto-3g
+O library sto-3g
+END
+
+SCF
+rhf
+PRINT low
+END
+
+geometry units angstrom
+  O   0.00000000  -0.06480341   0.00000000
+  H  -0.75996924   0.51423859   0.00000000
+  H   0.75996924   0.51423859   0.00000000
+end
+
+# Step 1: geometry optimization
+TASK scf optimize
+
+# Step 2: harmonic frequencies (required before VSCF)
+SCF
+PRINT none
+END
+TASK scf freq
+
+# Step 3: VSCF anharmonic PES with 3-mode couplings
+VSCF
+  coupling triplet
+  ngrid 16
+  iexcite 1
+END
+TASK scf vscf

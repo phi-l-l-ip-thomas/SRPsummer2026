@@ -1,0 +1,2 @@
+srun: warning: can't run 1 processes on 2 nodes, setting nnodes to 1
+srun: error: Unable to create step for job 56237061: Invalid generic resource (gres) specification

@@ -1,0 +1,10 @@
+export MOPAC_CMD=/opt/mopac/mopac
+export LD_LIBRARY_PATH=/opt/mopac/
+$MOPAC_CMD ./pts/job.00002864.mop
+$MOPAC_CMD ./pts/job.00002865.mop
+$MOPAC_CMD ./pts/job.00002866.mop
+$MOPAC_CMD ./pts/job.00002867.mop
+$MOPAC_CMD ./pts/job.00002868.mop
+$MOPAC_CMD ./pts/job.00002869.mop
+$MOPAC_CMD ./pts/job.00002870.mop
+$MOPAC_CMD ./pts/job.00002871.mop

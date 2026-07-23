@@ -1,0 +1,17 @@
+geometry = """
+ O       0.0  0.0  1.0  
+ H       1.0  0.0  0.0  
+ H       -1.0  0.0  0.0 
+"""
+charge = 0
+optimize = true
+coord_type = "cart"
+findiff = false
+step_size = 0.005
+program = "mopac"
+queue = "local"
+template = "scfcrt=1.D-21 aux(precision=14 comp xp xs xw) PM7 THREADS=1"
+job_limit = 1
+chunk_size = 1
+sleep_int = 2
+check_int = 0

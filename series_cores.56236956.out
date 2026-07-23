@@ -1,0 +1,137 @@
+chmod: changing permissions of '/workspace/inputs/h2o_vscf.nw': Operation not permitted
+mkdir: cannot create directory ‘/workspace/tests’: File exists
+mkdir: cannot create directory ‘h2o’: File exists
+mkdir: cannot create directory ‘pbqff’: File exists
+mkdir: cannot create directory ‘nwchem’: File exists
+mkdir: cannot create directory ‘mlcp’: File exists
+existing pbqff output. overwrite with -o/--overwrite
+mkdir: cannot create directory ‘pes’: File exists
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+
+Running MLCP pipeline...
+Processing inputs...
+Reading input parameters from file: /workspace/inputs/sample.inp
+Generating PBQFF input file
+Generating NWChem input file
+Generating MLCP input file
+Running PBQFF...
+Running qfflist2.py to read force constants from file: pbqff.out
+Reading harmonic force constants from file: pbqff.out
+Found harmonic force constants in file: pbqff.out
+Finished reading harmonic force constants from file: pbqff.out
+Reading cubic force constants from file: pbqff.out
+Found cubic force constants in file: pbqff.out
+Finished reading cubic force constants from file: pbqff.out
+Reading quartic force constants from file: pbqff.out
+Found quartic force constants in file: pbqff.out
+Finished reading quartic force constants from file: pbqff.out
+Running NWChem...
+Running nwchem_fc.py to read force constants from file: nwc_h2o.out
+Reading harmonic force constants from file: nwc_h2o.out
+Found NWChem harmonic force constants in file: nwc_h2o.out
+Finished reading NWChem harmonic force constants from file: nwc_h2o.out
+Processing intermediaries and running MLCP...
+Reading NWChem geometry from file: <_io.TextIOWrapper name='../nwchem/nwc_h2o.out' mode='r' encoding='UTF-8'>
+Found NWChem optimization in file: <_io.TextIOWrapper name='../nwchem/nwc_h2o.out' mode='r' encoding='UTF-8'>
+Found NWChem optimized geometry in file: <_io.TextIOWrapper name='../nwchem/nwc_h2o.out' mode='r' encoding='UTF-8'>
+Finished reading NWChem geometry from file: <_io.TextIOWrapper name='../nwchem/nwc_h2o.out' mode='r' encoding='UTF-8'>
+Reading PBQFF geometry from file: <_io.TextIOWrapper name='../pbqff/pbqff.out' mode='r' encoding='UTF-8'>
+Found PBQFF optimized geometry in file: <_io.TextIOWrapper name='../pbqff/pbqff.out' mode='r' encoding='UTF-8'>
+Finished reading PBQFF geometry from file: <_io.TextIOWrapper name='../pbqff/pbqff.out' mode='r' encoding='UTF-8'>
+nwc_points: 3
+pbqff_points: 3
+
+[2170.04, 4140.01, 4391.08]
+[[ 0.000044  0.000044  0.000044]
+ [-0.145458 -0.145458 -0.145458]
+ [-0.25004   0.        0.      ]
+ [ 0.000044  0.000044  0.000044]
+ [-0.145458 -0.145458 -0.145458]
+ [ 0.       -0.99611   0.      ]
+ [ 0.000044  0.000044  0.000044]
+ [-0.145458 -0.145458 -0.145458]
+ [ 0.        0.       -0.99611 ]]
+[[-0.1124  0.6806  0.6832]
+ [ 0.6653  0.0001  0.1489]
+ [-0.     -0.     -0.    ]
+ [ 0.182  -0.2155 -0.0906]
+ [-0.2378 -0.1649  0.1184]
+ [ 0.      0.     -0.    ]
+ [-0.6127  0.1779 -0.3223]
+ [ 0.2823  0.6569 -0.6205]
+ [ 0.     -0.      0.    ]]
+[[-0.03986  -0.027617  0.019834]
+ [-0.03986  -0.027617  0.019834]
+ [-0.03986  -0.027617  0.019834]]
+
+[[ 0.000044  0.000044  0.000044]
+ [-0.145458 -0.145458 -0.145458]
+ [-0.25004   0.        0.      ]
+ [ 0.000044  0.000044  0.000044]
+ [-0.145458 -0.145458 -0.145458]
+ [ 0.       -0.99611   0.      ]
+ [ 0.000044  0.000044  0.000044]
+ [-0.145458 -0.145458 -0.145458]
+ [ 0.        0.       -0.99611 ]]
+[2170.04, 4140.01, 4391.08]
+
+[2 1 0]
+[[ 0.000044  0.000044  0.000044]
+ [-0.145458 -0.145458 -0.145458]
+ [ 0.        0.       -0.25004 ]
+ [ 0.000044  0.000044  0.000044]
+ [-0.145458 -0.145458 -0.145458]
+ [ 0.       -0.99611   0.      ]
+ [ 0.000044  0.000044  0.000044]
+ [-0.145458 -0.145458 -0.145458]
+ [-0.99611   0.        0.      ]]
+[4391.08 4140.01 2170.04]
+Generating final harmonic FCs...
+Completed MLCP pipeline!
+
+Running MLCP pipeline...
+chmod: changing permissions of '/workspace/inputs/h2o_vscf.nw': Operation not permitted
+Running test suite...
+mkdir: cannot create directory '/workspace/simulations': File exists
+mkdir: cannot create directory 'napthalene': File exists
+mkdir: cannot create directory 'pbqff': File exists
+mkdir: cannot create directory 'nwchem': File exists
+mkdir: cannot create directory 'mlcp': File exists
+Processing inputs...
+Reading input parameters from file: /workspace/inputs/napthalene.inp
+Generating PBQFF input file
+Generating NWChem input file
+Generating MLCP input file
+Running PBQFF...
+existing pbqff output. overwrite with -o/--overwrite
+Running qfflist2.py to read force constants from file: pbqff.out
+Reading harmonic force constants from file: pbqff.out
+Reading cubic force constants from file: pbqff.out
+Reading quartic force constants from file: pbqff.out
+Running NWChem...
+Running nwchem_fc.py to read force constants from file: nwc_napthalene.out
+Reading harmonic force constants from file: nwc_napthalene.out
+Found NWChem harmonic force constants in file: nwc_napthalene.out
+Finished reading NWChem harmonic force constants from file: nwc_napthalene.out
+Processing intermediaries and running MLCP...
+Traceback (most recent call last):
+  File "/workspace/scripts/translation.py", line 2, in <module>
+    import sys, numpy as np
+ModuleNotFoundError: No module named 'numpy'
+mv: cannot stat '../nwchem/nwcf2napthalene.dat': No such file or directory
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Completed MLCP pipeline!
+Running MLCP pipeline...
+chmod: changing permissions of '/workspace/inputs/h2o_vscf.nw': Operation not permitted
+Running test suite...
+mkdir: cannot create directory '/workspace/simulations': File exists
+Processing inputs...
+Reading input parameters from file: /workspace/inputs/anthracene.inp
+Generating PBQFF input file
+Generating NWChem input file
+Generating MLCP input file
+Running PBQFF...
+[2026-07-21T01:21:44.510] error: *** STEP 56236956.0 ON nid004041 CANCELLED AT 2026-07-21T01:21:44 DUE TO TIME LIMIT ***
+[2026-07-21T01:21:44.510] error: *** JOB 56236956 ON nid004041 CANCELLED AT 2026-07-21T01:21:44 DUE TO TIME LIMIT ***

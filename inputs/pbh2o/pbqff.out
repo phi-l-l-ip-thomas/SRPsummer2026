@@ -1,0 +1,149 @@
+PID: 6312
+version: 04a313f5
+
+Configuration Options:
+geometry = {
+O
+H 1 OH
+H 1 OH 2 HOH
+
+OH = 1.0
+HOH = 109.5
+
+}
+optimize = true
+charge = 0
+step_size = 0.005
+coord_type = sic
+template = scfcrt=1.D-21 aux(precision=14 comp xp xs xw) PM7 THREADS=1
+hybrid_template = scfcrt=1.D-21 aux(precision=14 comp xp xs xw) PM7 THREADS=1
+queue_template = 
+program = mopac
+queue = local
+sleep_int = 2
+job_limit = 1
+chunk_size = 1
+findiff = false
+check_int = 0
+dummy_atoms = None
+norm_resume_hff = false
+
+Optimized Geometry:
+O       0.0000000000   0.0000000000   0.0000000000
+H       0.9554457364   0.0000000000   0.0000000000
+H      -0.2534371536   0.9212199326   0.0000000000
+
+Normalized Geometry:
+
+O          0.000000000000     -0.064810748120     -0.000000000000
+H         -0.759941446097      0.514296801170      0.000000000000
+H          0.759941446097      0.514296801170      0.000000000000
+
+Point Group = C2v(Axis(Y), Plane(Axis(Y), Axis(Z)), Plane(Axis(X), Axis(Y)))
+
+Symmetry Internal Coordinates:
+S0 (A1) = r(1-2) + r(1-3)
+S1 (A1) = ∠(2-1-3)
+S2 (B2) = r(1-2) - r(1-3)
+
+3 atoms require 69 jobs
+anpass sum of squared residuals:    2.20711659e-19
+
+Refit Geometry
+
+O          0.000000000000     -0.122376471012      0.000000000000
+H         -1.435866460939      0.971831054554      0.000000000000
+H          1.435866460939      0.971831054554      0.000000000000
+
+STATE NO.    ENERGY (CM-1)         ABOVE ZPT          VIBRATIONAL STATE
+    1           3490.7823              0.0000       NON-DEG (Vs) :    0    0    0
+    2           6322.3717           2831.5893       NON-DEG (Vs) :    1    0    0
+    3           6256.3895           2765.6072       NON-DEG (Vs) :    0    1    0
+    4           4796.3478           1305.5655       NON-DEG (Vs) :    0    0    1
+    5           9066.0548           5575.2724       NON-DEG (Vs) :    2    0    0
+    6           9002.1695           5511.3871       NON-DEG (Vs) :    0    2    0
+    7           6006.4606           2515.6783       NON-DEG (Vs) :    0    0    2
+    8           9014.6573           5523.8750       NON-DEG (Vs) :    1    1    0
+    9           7545.7491           4054.9667       NON-DEG (Vs) :    1    0    1
+   10           7550.2590           4059.4766       NON-DEG (Vs) :    0    1    1
+
+Transformed Geometry (Å):
+
+O      0.00000000  0.06480202  0.00000000
+H     -0.75982759 -0.51422751  0.00000000
+H      0.75982759 -0.51422751  0.00000000
+
+
+Equilibrium Rotational Constants (cm-1):
+         A                   B                   C          
+     28.088295195905     14.486093013231      9.557146301016
+
+Geometry: 
+O      0.00000000  0.06480202  0.00000000
+H     -0.75982759 -0.51422751  0.00000000
+H      0.75982759 -0.51422751  0.00000000
+
+Vibrational Frequencies (cm-1):
+ Mode    Symm    Harm    Fund    Corr
+    1      A1  2856.4  2796.4  2831.6
+    2      B2  2810.3  2765.6  2765.6
+    3      A1  1395.1  1305.6  1305.6
+
+ZPT =   3490.8
+
+Rotational Constants (cm-1):
+     State          A           B           C      
+    0    0    0  30.7982791  14.6158451   9.6169165
+    1    0    0  31.7935653  14.5622558   9.9134546
+    0    1    0  31.0369708  14.7784139   9.5832316
+    0    0    1  34.9881902  14.7516269   9.4844249
+
+Quartic Distortion Constants (cm-1):
+Watson A Reduction
+Delta  J:       0.001445301497
+Delta  K:       0.040060502155
+Delta JK:      -0.002775934248
+delta  J:       0.000490557216
+delta  k:       0.000991141693
+
+Watson S Reduction
+D J :       0.001369285700
+D JK:      -0.002319839465
+D K :       0.039680423170
+d 1 :      -0.000490557216
+d 2 :      -0.000038007899
+
+Linear Molecules
+De  :       0.000000000000
+
+Sextic Distortion Constants (cm-1):
+Watson A Reduction
+Phi  J:    6.313869337552e-7
+Phi  K:    1.999393775744e-4
+Phi JK:   -2.695260547480e-6
+Phi KJ:   -2.259680699432e-6
+phi  J:    2.816843775944e-7
+phi JK:   -1.827892299770e-7
+phi  k:    2.604738498464e-5
+
+Watson S Reduction
+H  J:    5.677376170525e-7
+H  K:    1.886043284117e-4
+H JK:   -7.171242859852e-6
+H KJ:    1.361500009235e-5
+h  1:    2.351136755157e-7
+h  2:    3.182465835135e-8
+h  3:    4.657070207865e-8
+
+Linear Molecule
+He  :     0.000000000000e0
+
+
+Coriolis Resonances:
+
+Type 1 Fermi Resonances:
+    2    0
+
+Type 2 Fermi Resonances:
+
+normal termination of pbqff

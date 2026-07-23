@@ -1,0 +1,107 @@
+$control
+system='anthr'
+rs='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 2 2022 20 21 13 0'
+$end-control
+
+# Resort section: desired order of modes on layer 1, to allow
+# arbitrary mode-combination schemes. The numbers entered in
+# the basis and layers sections apply to the resorted order
+
+$resort
+ 1  2  3  4  5  6  7  8  9 10   11 12 13 14 15 16 17 18   19 20 21 22 23 24 25 26   27 30 28 29 31 32 33 34   39 40 45 48   51 52 53 55   59 60 63   35 36 37 38 41 42 43 44   46 47 49 50   54 56 57 58 61   62 64 65 66
+$end-resort
+
+# Basis section: number of basis functions per DOF/mode
+# first line: primitive basis for individual DOFs
+# subsequent lines: basis for modes which combine DOFs
+
+$basis
+# C-H stretch                   C-C stretch 1             CC stretch 2              CC stretch 3              IP skel 1     IP skel 2     IP skel 3  OOP 1                     OOP 2         OOP 3            OOP 4
+# v2:   66                            45                       45                        45                       15            15           10          45                        15             21              15
+# v3:  286                           165                      165                       165                       35            35           20         165                        35             56              35
+# v4: 1001                           495                      495                       495                       70            70           35         495                        70            126              70
+99 99 99 99 99 99 99 99 99 99   99 99 99 99 99 99 99 99   99 99 99 99 99 99 99 99   99 99 99 99 99 99 99 99   99 99 99 99   99 99 99 99   99 99 99   99 99 99 99 99 99 99 99   99 99 99 99   99 99 99 99 99   99 99 99 99
+14 14 14 14 14 14 14 14 14 14   14 14 14 14 14 14 14 14   14 14 14 14 14 14 14 14   14 14 14 14 14 14 14 14   14 14 14 14   14 14 14 14   14 14 14   14 14 14 14 14 14 14 14   14 14 14 14   14 14 14 14 14   14 14 14 14
+ 196   196   6  6  196   196     196   196   196   196     196   196   196   196     196   196   196   196     196   196     196   196    14  196     196   196   196   196     196   196     196  14  196     196   196
+  55    55   6  6   55    55      55    55    55    55      55    55    55    55      55    55    55    55      55    55      55    55    14   55      55    55    55    55      55    55      55  14   28      55    55
+    256      6  6     256           256         256           256         256           256         256           256           256         192          256         256           256          128    28         256
+    210      6  6     210           210         210           210         210           210         210           210           210         120          210         210           210           84    28         210
+         256       256                    256                       256                       256                 210           210         120                256                 210             256            210
+         252       252                    165                       165                       165                 210           210         120                165                 210             252            210
+128
+$end-basis
+
+# Layers section: number of DOFs/modes to combine from previous layer
+# The first (primitive basis) layer is implied, with 1,1,...,1, so
+# input begins with the second layer
+
+$layers
+1 1 1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1  1 1 1 1 1 1 1 1  1 1 1 1  1 1 1 1  1 1 1  1 1 1 1 1 1 1 1  1 1 1 1  1 1 1 1 1  1 1 1 1
+ 2   2  1 1  2   2     2   2   2   2     2   2   2   2    2   2   2   2    2   2    2   2   1  2    2   2   2   2    2   2    2  1  2    2   2
+ 1   1  1 1  1   1     1   1   1   1     1   1   1   1    1   1   1   1    1   1    1   1   1  1    1   1   1   1    1   1    1  1  1    1   1
+   2    1 1    2         2       2         2       2        2       2        2        2      2        2       2        2       2    1      2
+   1    1 1    1         1       1         1       1        1       1        1        1      1        1       1        1       1    1      1
+      2      2               2                 2                2            1        1      1            2            1         2         1
+      1      1               1                 1                1            1        1      1            1            1         1         1
+12
+$end-layers
+
+# Node section: must include layer-mode='<layer>-<mode>'. Set any
+# solver settings which differ from defaults or $control settings here
+
+$node
+layer-mode='4-1' max_sum='9'
+layer-mode='4-2' max_sum='9'
+layer-mode='4-5' max_sum='9'
+layer-mode='4-6' max_sum='9'
+layer-mode='4-7' max_sum='9'
+layer-mode='4-8' max_sum='9'
+layer-mode='4-9' max_sum='9'
+layer-mode='4-10' max_sum='9'
+layer-mode='4-11' max_sum='9'
+layer-mode='4-12' max_sum='9'
+layer-mode='4-13' max_sum='9'
+layer-mode='4-14' max_sum='9'
+layer-mode='4-15' max_sum='9'
+layer-mode='4-16' max_sum='9'
+layer-mode='4-17' max_sum='9'
+layer-mode='4-18' max_sum='9'
+layer-mode='4-19' max_sum='9'
+layer-mode='4-20' max_sum='9'
+layer-mode='4-21' max_sum='9'
+layer-mode='4-22' max_sum='9'
+layer-mode='4-24' max_sum='9'
+layer-mode='4-25' max_sum='9'
+layer-mode='4-26' max_sum='9'
+layer-mode='4-27' max_sum='9'
+layer-mode='4-28' max_sum='9'
+layer-mode='4-29' max_sum='9'
+layer-mode='4-30' max_sum='9'
+layer-mode='4-31' max_sum='9'
+layer-mode='4-33' max_sum='9'
+layer-mode='4-34' max_sum='9'
+layer-mode='4-35' max_sum='9'
+layer-mode='6-1' max_sum='5' max_nmode='3'
+layer-mode='6-4' max_sum='5' max_nmode='3'
+layer-mode='6-5' max_sum='5' max_nmode='3'
+layer-mode='6-6' max_sum='5' max_nmode='3'
+layer-mode='6-7' max_sum='5' max_nmode='3'
+layer-mode='6-8' max_sum='5' max_nmode='3'
+layer-mode='6-9' max_sum='5' max_nmode='3'
+layer-mode='6-10' max_sum='5' max_nmode='3'
+layer-mode='6-11' max_sum='5' max_nmode='3'
+layer-mode='6-12' max_sum='5' max_nmode='3'
+layer-mode='6-13' max_sum='6' max_nmode='3'
+layer-mode='6-14' max_sum='5' max_nmode='3'
+layer-mode='6-15' max_sum='5' max_nmode='3'
+layer-mode='6-16' max_sum='5' max_nmode='3'
+layer-mode='6-17' max_sum='6' max_nmode='3'
+layer-mode='6-19' max_sum='5' max_nmode='3'
+layer-mode='8-1' max_sum='5' max_nmode='3'
+layer-mode='8-2' max_sum='5' max_nmode='3'
+layer-mode='8-3' max_sum='3' max_nmode='3'
+layer-mode='8-4' max_sum='3' max_nmode='3'
+layer-mode='8-5' max_sum='3' max_nmode='3'
+layer-mode='8-9' max_sum='3' max_nmode='3'
+layer-mode='8-11' max_sum='5' max_nmode='3'
+$end-node

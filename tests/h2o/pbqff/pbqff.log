@@ -1,0 +1,33 @@
+[2026-07-20T23:36:53Z WARN  pbqff] failed to remove '"./opt"' with No such file or directory (os error 2)
+[2026-07-20T23:36:53Z WARN  pbqff] failed to remove '"./pts"' with No such file or directory (os error 2)
+[2026-07-20T23:36:53Z WARN  pbqff] failed to remove '"./freqs"' with No such file or directory (os error 2)
+[2026-07-20T23:36:54Z DEBUG psqs::queue::drain] submitted chunk 0 after 0.5 s
+[2026-07-20T23:36:54Z DEBUG psqs::queue::drain] finished 1 jobs in 0.5 s
+[iter 0 2026-07-20 23:36:54 0.1 CPU s] 0 jobs remaining
+[2026-07-20T23:36:55Z DEBUG psqs::queue::drain] finished 0 jobs in 0.0 s
+finished dropping after 0.0 s
+finished dropping after 0.0 s
+0.0 s reading ok, 0.0 s writing input, 0.0 s writing script, 0.4 s submitting, 1.0 s sleeping, 0.0 s removing
+total optimize time: 0.2 sec
+[2026-07-20T23:37:34Z DEBUG psqs::queue::drain] submitted chunk 0 after 39.0 s
+[2026-07-20T23:37:34Z DEBUG psqs::queue::drain] finished 117 jobs in 39.1 s
+[iter 0 2026-07-20 23:37:34 0.4 CPU s] 0 jobs remaining
+[2026-07-20T23:37:35Z INFO  psqs::queue::drain] writing checkpoint to ./chk.json
+[2026-07-20T23:37:35Z ERROR psqs::queue::drain] failed to rename temporary file to ./chk.json with Os { code: 18, kind: CrossesDevices, message: "Invalid cross-device link" }
+[2026-07-20T23:37:35Z DEBUG psqs::queue::drain] finished 0 jobs in 0.0 s
+finished dropping after 0.0 s
+finished dropping after 0.0 s
+0.0 s reading ok, 1.8 s writing input, 1.8 s writing script, 37.3 s submitting, 1.0 s sleeping, 0.0 s removing
+total job time: 25.4 sec
+failed to write spectro input to freqs/spectro.in for No such file or directory (os error 2)
+[2026-07-20T23:37:38Z WARN  pbqff::coord_type::normal] failed to move "./freqs" to "./hff/freqs" with No such file or directory (os error 2)
+[2026-07-20T23:38:25Z DEBUG psqs::queue::drain] submitted chunk 0 after 46.8 s
+[2026-07-20T23:38:25Z DEBUG psqs::queue::drain] finished 129 jobs in 46.8 s
+[iter 0 2026-07-20 23:38:25 0.7 CPU s] 0 jobs remaining
+[2026-07-20T23:38:26Z INFO  psqs::queue::drain] writing checkpoint to ./chk.json
+[2026-07-20T23:38:26Z ERROR psqs::queue::drain] failed to rename temporary file to ./chk.json with Os { code: 18, kind: CrossesDevices, message: "Invalid cross-device link" }
+[2026-07-20T23:38:26Z DEBUG psqs::queue::drain] finished 0 jobs in 0.0 s
+finished dropping after 0.0 s
+finished dropping after 0.0 s
+0.0 s reading ok, 4.0 s writing input, 4.0 s writing script, 42.8 s submitting, 1.0 s sleeping, 0.0 s removing
+total job time: 27.2 sec

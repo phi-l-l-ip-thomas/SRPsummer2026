@@ -1,0 +1,10 @@
+[iter 0 2026-05-26 15:32:19 0.0 CPU s] 0 jobs remaining
+finished dropping after 0.0 s
+finished dropping after 0.0 s
+0.0 s reading ok, 0.0 s writing input, 0.0 s writing script, 0.1 s submitting, 1.0 s sleeping, 0.0 s removing
+total optimize time: 0.0 sec
+[iter 0 2026-05-26 15:32:21 0.1 CPU s] 0 jobs remaining
+finished dropping after 0.0 s
+finished dropping after 0.0 s
+0.0 s reading ok, 0.0 s writing input, 0.0 s writing script, 5.5 s submitting, 1.0 s sleeping, 0.0 s removing
+total job time: 2.3 sec

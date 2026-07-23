@@ -1,0 +1,110 @@
+FROM env:latest AS env
+
+# Install Rust
+WORKDIR /opt
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    mkdir -p rust && \
+    mv /root/.cargo ./rust/cargo && \
+    mv /root/.rustup ./rust/rustup && \
+    ln -s /opt/rust/cargo /root/.cargo && \
+    ln -s /opt/rust/rustup /root/.rustup
+ENV CARGO_HOME=/opt/rust/cargo
+ENV RUSTUP_HOME=/opt/rust/rustup
+ENV PATH=/opt/rust/cargo/bin:${PATH}
+
+# Install MOPAC
+WORKDIR /opt
+RUN git clone https://github.com/openmopac/mopac.git
+RUN cd mopac && \
+    mkdir build && \
+    cd build && \
+    # activate micromamba env + install numpy (and other python modules)
+    cmake .. -DPython3_EXECUTABLE=/opt/miniconda3/bin/python && \
+    make
+ENV PATH=/opt/mopac/build:${PATH}
+
+# Resolve queuing issue with exec location
+RUN mv /opt/mopac/build/mopac /opt/mopac
+ENV RUST_BACKTRACE=full
+ENV RUST_LOG=debug
+
+# Install pbqfff (with FC output)
+WORKDIR /opt
+RUN git clone --branch brent/print-fcs https://github.com/ntBre/pbqff.git
+RUN cd pbqff && \
+    cargo build --release && \
+    # indirectly through target/release/pbqff **had --features vers but that didnt work
+    ln -sf $(realpath target/release/pbqff) ${PREFIX}/pbqff && \
+    cargo install --path crates/pbqff/
+ENV PATH=/opt/pbqff:${PATH}
+
+# Install OpenBLAS 
+WORKDIR /opt
+RUN git clone -b v0.3.25 https://github.com/OpenMathLib/OpenBLAS.git OpenBLAS && \
+    cd /opt/OpenBLAS                                                          && \
+    make TARGET=ZEN INTERFACE64=1                                             && \
+    make install PREFIX=/opt/OpenBLAS/install
+ENV PATH=$PATH:/opt/OpenBLAS/install/bin
+ENV PATH=$PATH:/opt/OpenBLAS/install/include
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/OpenBLAS/install/lib
+
+# Install ScaLAPACK
+WORKDIR /opt
+RUN git clone https://github.com/Reference-ScaLAPACK/scalapack.git && \
+    cd /opt/scalapack && \
+    sed -i '/set_source_files_properties(TOOLS\/SL_gridreshape.c PROPERTIES COMPILE_OPTIONS "-Wno-error=implicit-function-declaration")/d' CMakeLists.txt && \
+    mkdir build && cd build && \
+    /opt/cmake-3.29.6-linux-x86_64/bin/cmake \
+      -DCMAKE_INSTALL_PREFIX=/opt/scalapack/install \
+      -DCMAKE_C_COMPILER=/opt/nvidia/hpc_sdk/Linux_x86_64/24.5/comm_libs/mpi/bin/mpicc \
+      -DCMAKE_C_FLAGS="-fPIC" \
+      -DCMAKE_Fortran_COMPILER=/opt/nvidia/hpc_sdk/Linux_x86_64/24.5/comm_libs/mpi/bin/mpif90 \
+      -DCMAKE_Fortran_FLAGS="-fPIC -i8" \
+      -DBUILD_COMPLEX=ON -DBUILD_COMPLEX16=ON .. && \
+    make -j 32 && make install
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/scalapack/lib
+
+# Install NWChem
+WORKDIR /opt
+RUN git clone https://github.com/nwchemgit/nwchem.git
+ENV NWCHEM_TOP=/opt/nwchem
+WORKDIR /opt/nwchem/src
+ENV NWCHEM_TARGET=LINUX64
+ENV NWCHEM_MODULES="all python"
+ENV USE_MPI=y
+
+ENV BLAS_SIZE=8
+ENV LAPACK_SIZE=8
+ENV BLAS_LIB="-L/opt/OpenBLAS/install/lib -lopenblas"
+ENV BLASOPT="-L/opt/OpenBLAS/install/lib -lopenblas"
+ENV LAPACK_LIB="-L/opt/OpenBLAS/install/lib -lopenblas"
+ENV USE_SCALAPACK=y
+ENV SCALAPACK_SIZE=8
+ENV SCALAPACK_LIB="-L/opt/scalapack/install/lib -lscalapack"
+RUN make nwchem_config
+ENV PATH=/usr/local/bin:/usr/bin:${PATH}
+RUN make -j 32
+ENV PATH=/opt/nwchem/bin/LINUX64:$PATH
+ENV NWCHEM_EXECUTABLE=$NWCHEM_TOP/bin/${NWCHEM_TARGET}/nwchem
+ENV MPIRUN_PATH=/usr/local/bin/mpirun
+
+# Install MLCP
+WORKDIR /opt
+RUN git clone -b MorsifyDirect https://github.com/phi-l-l-ip-thomas/mlcp.git
+ENV MPICH_FC=nvfortran
+WORKDIR /opt/mlcp
+RUN cp config/arch_nvhpc_mpiompacc.mk ./arch.mk && \
+    sed -i 's/cc60/cc80,cuda12.4/' /opt/mlcp/arch.mk && \
+    sed -i 's|mpifort|/opt/nvidia/hpc_sdk/Linux_x86_64/24.5/comm_libs/mpi/bin/mpif90|' /opt/mlcp/arch.mk && \
+    make && \
+    cp config/arch_nvhpc_ompacc.mk ./arch.mk && \
+    sed -i 's/cc60/cc80,cuda12.4/' /opt/mlcp/arch.mk && \
+    sed -i 's|mpifort|/opt/nvidia/hpc_sdk/Linux_x86_64/24.5/comm_libs/mpi/bin/mpif90|' /opt/mlcp/arch.mk && \
+    make
+ENV PATH=/opt/mlcp:$PATH
+
+# Starting directory
+RUN mkdir /opt/entrypoints
+RUN conda init bash
+
+# podman-hpc build -f ./containers/Containerfile_env -t env . && podman-hpc build -f ./containers/Containerfile_working -t working . && podman-hpc migrate working 

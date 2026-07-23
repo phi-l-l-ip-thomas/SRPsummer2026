@@ -1,0 +1,13 @@
+{
+  "shell_port": 46377,
+  "iopub_port": 39797,
+  "stdin_port": 34125,
+  "control_port": 38101,
+  "hb_port": 57955,
+  "ip": "127.0.0.1",
+  "key": "4491ff29-16491532f9fe327cc08674c4",
+  "transport": "tcp",
+  "signature_scheme": "hmac-sha256",
+  "kernel_name": "python3",
+  "jupyter_session": "/home/kaibstrings/physics401/Physics_401_HW_4.ipynb"
+}
