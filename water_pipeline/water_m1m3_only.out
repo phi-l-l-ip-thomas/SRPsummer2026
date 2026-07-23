@@ -1,0 +1,502 @@
+ MLCP running in serial mode
+ with 1 OpenMP threads/process
+ ##################################################
+
+                        _                          
+                       | |                         
+              _ __ ___ | | ___  _ __               
+             | '_ ` _ `| |/ __`| '_ `              
+             | | | | | | | |__ | |_) |             
+             |_| |_| |_|_|`___/| .__/              
+                               | |                 
+                               |_|                 
+  ------------------------------------------------ 
+     Multi-Layer CP-format solver for the Time-    
+    Independent Vibrational Schrodinger Equation   
+  ------------------------------------------------ 
+  If using this code results in publication, please
+  cite as:
+
+  "Using Nested Contractions and a Hierarchical
+  Tensor Format to Compute Vibrational Spectra of
+  Molecules with Seven Atoms,” P. S. Thomas and T.
+  Carrington. J. Phys. Chem. A, 2015, 119(52),
+  13074-13091. [DOI:10.1021/acs.jpca.5b10015]
+   (https://doi.org/10.1021/acs.jpca.5b10015)
+
+ ##################################################
+
+ MLCP initialized on 7/21/2026 at 13:23:13
+
+ Setting up mode-combination module...
+
+ ** Input vars (defaults / set in $control) **
+
+ Hamiltonian to be set up      (system):  water
+ Path to potential constants (pes_path):  /global/u1/a/alexisr/p1d_m1m3
+ Restart file name            (resfile):  none
+ PES transformation type (pe_transform):  read-morse-tanh
+ Divide out force constants  (dividefc):      F
+ PE transform factor     (pe_trans_fac):  1.0000E+00
+ Random seed                       (rs):  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ Guess max nr coupled modes (max_nmode):    -1
+ Guess max sum of quanta      (max_sum):    -1
+ Guess max quantum number      (max_qn):    -1
+ Guess target energy          (Etarget):  0.0000E+00
+ Solver activation algo    (activation):  gram
+ Nr. solver activations  (nactivations):     1
+ Hamiltonian term minimum cutoff (hcut):  0.0000E+00
+ Printout verbosity         (verbosity):     1
+ Data algorithm for OMP/ACC      (algo):    -1
+ Low-memory calculation type   (lowmem):     2
+ H sorting algorithm       (h_sort_alg):  pack
+ Calculate spectral bounds (calcbounds):  calc
+ Spectral bounds pad factor (padbounds):  0.0000E+00
+ Eigensolver algorithm to use  (solver):  powr
+ Solver convergence criterion (solvtol):  1.0000E-10
+ Number of solver cycles       (ncycle):    10
+ Number of Power iteratons       (npow):    10
+ Orthogonalization algo.    (orthogalg):  gram
+ Use subspace diagonalization    (diag):     T
+ Rank-reduce HQ during diag. (reduceHQ):     T
+ Use vector updates            (update):     T
+ Gen. eigv regularization (ovrlpenalty):  0.0000E+00
+ Reduction type for 2-D modes   (red2D):    SVD
+ Reduction type for >2-D modes  (redND):    ALS
+ Wavefunction reduced rank    (psirank):    10
+ Number of ALS iterations-w.f.(psinals):    10
+ Hamiltonian reduced rank       (hrank):     0
+ Number of ALS iterations-H     (hnals):   200
+ ALS regularization        (alspenalty):  1.0000E-10
+ ALS solver algorithm  (als_linsys_alg):  LU
+
+** Input vars specified in $node namelist  **
+
+layer-mode='2-1' algo='0'
+
+ ** Structure of multilayer CP-format tree **
+
+ Number of DOF    :            2
+ Number of layers :            2
+
+Resort modes in Hamiltonian in this order:
+         1    2
+
+modcomb: # prev. layer modes in current
+v-layer;mode-> 
+         1    2
+===== ---- ----
+   1     1    1
+   2     2
+
+modstart: prev. layer mode where current begins
+v-layer;mode-> 
+         1    2
+===== ---- ----
+   1     1    2
+   2     1
+
+whichmod: next layer mode where current is found
+v-layer;mode-> 
+         1    2
+===== ---- ----
+   1     1    1
+
+gdim: number of basis functions per mode
+v-layer;mode-> 
+         1    2
+===== ---- ----
+   1     9    9
+   2    20
+
+ ********************************************
+
+ Random seed generated:  13 23 13 21 7 2026 2 3
+
+
+ Hamiltonian setup...
+
+ --> Reading force field for: water
+     Potential constants of order 2 read from file : 3
+     Potential constants of order 3 read from file : 2
+     Potential constants of order 4 read from file : 4
+     Potential constants of order 6 read from file : 2
+     Potential constants of order 8 read from file : 2
+     Number of DOF detected in force constant files: 2
+
+
+ Potential constants, order: 2
+
+   1   1           893.035253325000
+   1   2            -0.000000000500
+   2   2          2978.970839035600
+
+ Potential constants, order: 3
+
+   1   1   2            -0.000000000600
+   1   2   2             0.189709959800
+
+ Potential constants, order: 4
+
+   1   1   1   1           918.586881119700
+   1   1   1   2            -0.000000000100
+   1   1   2   2            -1.194175300600
+   2   2   2   2          3103.542655289600
+
+ Potential constants, order: 6
+
+   1   1   1   1   1   1           891.509707573400
+   2   2   2   2   2   2          2997.145227899700
+
+ Potential constants, order: 8
+
+   1   1   1   1   1   1   1   1           818.316577822200
+   2   2   2   2   2   2   2   2          2727.646212927000
+
+
+ --> Reading Morse parameters for: water
+ Morse/tanh parameters extracted from PES:
+
+ DOF         Omega                  Alpha                  Beta
+   1      2855.920572000000         0.608313000000         0.000000000000
+   2      1395.401993000000         0.859276000000         0.000000000000
+
+ Operator types present:
+
+ [1] = (p_i)^n
+ [2] = (q_i)^n
+ [3] = (tanh(alpha_i*q_i))^n
+ [4] = (1-exp(-beta_i*q_i))^n
+
+ --> The PES is expressed in asymptotically-decaying coordinates from user-defined parameters
+
+ Asymmetric 1D potentials : y_i = 1-exp(-beta_i*q_i)
+  Symmetric 1D potentials : y_i =  tanh(alpha_i*q_i)
+  d-D coupling potentials : y_i =  tanh(alpha_i*q_i)
+
+ Primitive operator table: (X = operator is present)
+
+ Type| 1                      | 2                      | 3                      | 4                      |
+order| 1  2  3  4  5  6  7  8 | 1  2  3  4  5  6  7  8 | 1  2  3  4  5  6  7  8 | 1  2  3  4  5  6  7  8 |
+ -DOF|------------------------|------------------------|------------------------|------------------------|
+   1 |    X                   |                        | X  X  X  X     X     X |                        |
+   2 |    X                   |                        | X  X     X     X     X |                        |
+
+ --> Generating primitive operators
+
+ --- Primitive H Operators ---
+
+ (p^2)_1                                                         
+ (tanh(a*q)^1)_1                                                 
+ (tanh(a*q)^2)_1                                                 
+ (tanh(a*q)^3)_1                                                 
+ (tanh(a*q)^4)_1                                                 
+ (tanh(a*q)^6)_1                                                 
+ (tanh(a*q)^8)_1                                                 
+ (p^2)_2                                                         
+ (tanh(a*q)^1)_2                                                 
+ (tanh(a*q)^2)_2                                                 
+ (tanh(a*q)^4)_2                                                 
+ (tanh(a*q)^6)_2                                                 
+ (tanh(a*q)^8)_2                                                 
+
+
+ Restart setup...
+
+ ***** MAIN RUN *****
+
+ --- NODE 1 (LAYER-MODE: 1-1) ---
+
+   Initial guess harmonic functions:
+
+                           1
+     1427.960286000000 ->  0
+     4283.880858000000 ->  1
+     7139.801430000000 ->  2
+     9995.722002000000 ->  3
+    12851.642574000000 ->  4
+    15707.563146000000 ->  5
+    18563.483717999999 ->  6
+    21419.404289999999 ->  7
+    24275.324862000001 ->  8
+
+   Building mode Hamiltonian...
+     sorting pass 1: 5 -> 1
+
+   *** ModeH memory usage ***
+       Hamiltonian rank reduced from 5 to 1 by combining like terms
+       H memory (condensed):     0.000001 GB
+
+ Entering Solver: legacy CPU algorithm selected...
+
+ Initial guess   :            0   1427.9602860000000        4283.8808580000004        7139.8014299999995        9995.7220020000004        12851.642574000000        15707.563146000000        18563.483717999999        21419.404289999999        24275.324862000001     
+
+ Diagonalization :            0   734.03326386072638        2174.4440436373579        3429.0882997508379        4839.0479968023083        6178.0293954508770        8824.4575830147787        10677.075429403865        15507.050573966184        17843.254714368410     
+
+ Eigenvectors, assignments based on rank-1 approximation :
+
+Mode:  1      Energy              E-E0             delta     Assignment
+   1)  0    734.033263860726      0.000000000000   0.000E+00 ZPVE
+   2)  1   2174.444043637358   1440.410779776631   0.000E+00 FUND v_1
+   3)  2   3429.088299750838   2695.055035890111   0.000E+00  OT  2v_1
+   4)  3   4839.047996802308   4105.014732941582   0.000E+00  OT  3v_1
+   5)  4   6178.029395450877   5443.996131590151   0.000E+00  OT  4v_1
+   6)  5   8824.457583014779   8090.424319154053   0.000E+00  OT  5v_1
+   7)  6  10677.075429403865   9943.042165543138   0.000E+00  OT  6v_1
+   8)  7  15507.050573966184  14773.017310105457   0.000E+00  OT  7v_1
+   9)  8  17843.254714368410  17109.221450507684   0.000E+00  OT  8v_1
+
+ node 1: finished on 7/21/2026 at 13:23:14
+
+ --- NODE 2 (LAYER-MODE: 1-2) ---
+
+   Initial guess harmonic functions:
+
+                           2
+      697.700996500000 ->  0
+     2093.102989500000 ->  1
+     3488.504982500000 ->  2
+     4883.906975500000 ->  3
+     6279.308968500000 ->  4
+     7674.710961500000 ->  5
+     9070.112954500000 ->  6
+    10465.514947500000 ->  7
+    11860.916940499999 ->  8
+
+   Building mode Hamiltonian...
+     sorting pass 1: 5 -> 1
+
+   *** ModeH memory usage ***
+       Hamiltonian rank reduced from 5 to 1 by combining like terms
+       H memory (condensed):     0.000001 GB
+
+ Entering Solver: legacy CPU algorithm selected...
+
+ Initial guess   :            0   697.70099649999997        2093.1029895000001        3488.5049824999996        4883.9069755000000        6279.3089684999995        7674.7109614999999        9070.1129545000003        10465.514947500000        11860.916940499999     
+
+ Diagonalization :            0   1323.1928190133658        4033.6966735133669        6694.0326544678956        9053.7974342644920        10734.806570570763        12089.608112849031        12927.980459094611        13955.793540468761        14994.306759895240     
+
+ Eigenvectors, assignments based on rank-1 approximation :
+
+Mode:  2      Energy              E-E0             delta     Assignment
+   1)  0   1323.192819013366      0.000000000000   0.000E+00 ZPVE
+   2)  1   4033.696673513367   2710.503854500001   0.000E+00 FUND v_2
+   3)  2   6694.032654467896   5370.839835454530   0.000E+00  OT  2v_2
+   4)  3   9053.797434264492   7730.604615251126   0.000E+00  OT  3v_2
+   5)  4  10734.806570570763   9411.613751557397   0.000E+00  OT  4v_2
+   6)  5  12089.608112849031  10766.415293835666   0.000E+00  OT  5v_2
+   7)  6  12927.980459094611  11604.787640081246   0.000E+00  OT  6v_2
+   8)  7  13955.793540468761  12632.600721455396   0.000E+00  OT  7v_2
+   9)  8  14994.306759895240  13671.113940881874   0.000E+00  OT  8v_2
+
+ node 2: finished on 7/21/2026 at 13:23:14
+
+ --- NODE 3 (LAYER-MODE: 2-1) ---
+
+   * algo changed from -1 to 0
+
+   Initial guess product functions:
+
+                                   1  2
+     0   0   2057.226082874092 ->  0  0
+     1   0   3497.636862650724 ->  1  0
+     2   0   4752.281118764204 ->  2  0
+     0   1   4767.729937374093 ->  0  1
+     3   0   6162.240815815674 ->  3  0
+     1   1   6208.140717150725 ->  1  1
+     0   2   7428.065918328624 ->  0  2
+     2   1   7462.784973264204 ->  2  1
+     4   0   7501.222214464244 ->  4  0
+     1   2   8868.476698105256 ->  1  2
+     3   1   8872.744670315677 ->  3  1
+     0   3   9787.830698125221 ->  0  3
+     2   2  10123.120954218735 ->  2  2
+     5   0  10147.650402028145 ->  5  0
+     4   1  10211.726068964244 ->  4  1
+     1   3  11228.241477901853 ->  1  3
+     0   4  11468.839834431492 ->  0  4
+     3   2  11533.080651270206 ->  3  2
+     6   0  12000.268248417231 ->  6  0
+     2   3  12482.885734015332 ->  2  3
+
+   Building mode Hamiltonian...
+     sorting pass 1: 7 -> 4
+
+   *** ModeH memory usage ***
+       Hamiltonian rank reduced from 7 to 4 by combining like terms
+       H memory (condensed):     0.000005 GB
+
+   *** Solver memory usage ***
+       Number of threads,                           (N):            1
+       Vector length,                               (V):           19
+       Block size,                                  (B):           20
+       Terms in H (including E-shift),              (T):            5
+       Rank,                                        (R):           10
+       Max n,                                       (X):            9
+       Number of DOF,                               (D):            2
+       Number of parallelized vectors,    min(N,B), (P):            1
+       Single-vector storage,                     (V*R):     0.000001 GB
+       Block vector storage,                    (B*V*R):     0.000028 GB
+       Matrix-vector product,                   (T*V*R):     0.000007 GB
+       BlockPower iteration,              ([B+P*T]*V*R):     0.000035 GB
+       Extra memory for rank-reductions                :     0.000002 GB
+       BlockPower iteration TOTAL                      :     0.000037 GB
+       Gram-Schmidt storage,                   (2B*V*R):     0.000057 GB
+       Extra memory for rank-reductions                :     0.000002 GB
+       Gram-Schmidt TOTAL                              :     0.000059 GB
+       QHQ calculation storage,       ((B+P*(T+1))*V*R):     0.000037 GB
+       Extra memory for rank-reductions                :     0.000002 GB
+       QHQ calculation TOTAL                           :     0.000039 GB
+       Vector update storage,             ([2+P]*B*V*R):     0.000085 GB
+       Extra memory for rank-reductions                :     0.000002 GB
+       Vector update TOTAL                             :     0.000087 GB
+       PSI MEMORY REQUIRED,       (MAX OF ABOVE TOTALS):     0.000087 GB
+
+ Entering Solver: legacy CPU algorithm selected (2D node with SVD reduction)...
+
+ Power spectral range estimation
+
+  i          boundsl         boundsu
+         2057.226083     32837.561474 (uncoupled guess)
+  0      2057.188082     32837.120651
+  1      2057.188081     32837.120660
+  2      2057.188081     32837.120660
+  3      2057.188081     32837.120660
+  4      2057.188081     32837.120660
+  5      2057.188081     32837.120660
+
+ Spectral range of H = [    2057.188081,   32837.120660]
+ Padded by  0.00E+00 = [    2057.188081,   32837.120660]
+
+ Initial guess   :            0   2057.2260828740923        3497.6368626507237        4752.2811187642037        4767.7299373740934        6162.2408158156741        6208.1407171507253        7428.0659183286243        7462.7849732642044        7501.2222144642437        8868.4766981052562        8872.7446703156766        9787.8306981252208        10123.120954218735        10147.650402028145        10211.726068964244        11228.241477901853        11468.839834431492        11533.080651270206        12000.268248417231        12482.885734015332     
+
+ Diagonalization :            0   2057.1880810409948        3497.5468046904389        4752.1674367656951        4767.6324858076878        6162.1266974318187        6207.9097778399246        7427.9284579478217        7462.4934572060984        7501.1088799659910        8868.1509597109616        8872.4520420409008        9787.6498058665929        10122.709782887880        10147.547167176375        10211.435435473391        11227.812823639566        11468.626103053015        11532.667906212693        12000.164319034291        12482.344651740694     
+
+ BlockPower cycle:            1   2057.1880809957911        3497.5468045635530        4752.1674364117407        4767.6324856624851        6162.1266970455026        6207.9097769848713        7427.9284567644281        7462.4934561444106        7501.1088769168900        8868.1509553662690        8872.4520353654425        9787.6498038306854        10122.709770362013        10147.547164396961        10211.435428343369        11227.812807465532        11468.626083430010        11532.667892783511        12000.164314899783        12482.344629181247     
+ relative rms delta =  1.7978E-10 ; nup   =     0
+ relative max delta =  1.8073E-09 ; ndown =    15
+ relative sum delta =  1.1199E-08 ; nsame =     5 ; nlock =     0
+
+ BlockPower cycle:            2   2057.1880809958011        3497.5468045635503        4752.1674364117353        4767.6324856624879        6162.1266970454972        6207.9097769848631        7427.9284567643090        7462.4934561443897        7501.1088769163835        8868.1509553633223        8872.4520353622866        9787.6498038285463        10122.709770311174        10147.547164395986        10211.435428336623        11227.812807381573        11468.626083127294        11532.667892554344        12000.164314643598        12482.344628209088     
+ relative rms delta =  4.3860E-12 ; nup   =     0
+ relative max delta =  7.7883E-11 ; ndown =     0
+ relative sum delta =  1.5975E-10 ; nsame =    20 ; nlock =     0
+
+ Relative rms error of all states converged to within:  1.0000E-10
+
+ Eigenvectors: configurations with |c|^2 larger than :  5.0000E-02 x largest coef, or largest 16 coefs
+
+Mode:  1  2
+   1)         2057.188080995801      0.000000000000
+       0  0      1.000
+   2)         3497.546804563550   1440.358723567749
+       1  0      1.000
+   3)         4752.167436411735   2694.979355415934
+       2  0      1.000
+   4)         4767.632485662488   2710.444404666687
+       0  1      1.000
+   5)         6162.126697045497   4104.938616049696
+       3  0      1.000
+   6)         6207.909776984863   4150.721695989062
+       1  1      1.000
+   7)         7427.928456764309   5370.740375768508
+       0  2      1.000
+   8)         7462.493456144390   5405.305375148589
+       2  1      1.000
+   9)         7501.108876916383   5443.920795920582
+       4  0      1.000
+  10)         8868.150955363322   6810.962874367521
+       1  2      1.000
+  11)         8872.452035362287   6815.263954366485
+       3  1      1.000
+  12)         9787.649803828546   7730.461722832745
+       0  3      1.000
+  13)        10122.709770311174   8065.521689315373
+       2  2      1.000
+  14)        10147.547164395986   8090.359083400185
+       5  0      1.000
+  15)        10211.435428336623   8154.247347340822
+       4  1      1.000
+  16)        11227.812807381573   9170.624726385773
+       1  3      1.000
+  17)        11468.626083127294   9411.438002131494
+       0  4      1.000
+  18)        11532.667892554344   9475.479811558544
+       3  2      1.000
+  19)        12000.164314643598   9942.976233647798
+       6  0      1.000
+  20)        12482.344628209088  10425.156547213286
+       2  3      1.000
+
+ Eigenvectors, assignments based on rank-1 approximation :
+
+Mode:  1  2      Energy              E-E0             delta     Assignment
+   1)  0  0   2057.188080995801      0.000000000000  -4.863E-15 ZPVE
+   2)  1  0   3497.546804563550   1440.358723567749   7.801E-16 FUND v_1
+   3)  2  0   4752.167436411735   2694.979355415934   1.148E-15  OT  2v_1
+   4)  0  1   4767.632485662488   2710.444404666687  -5.723E-16 FUND v_2
+   5)  3  0   6162.126697045497   4104.938616049696   8.856E-16  OT  3v_1
+   6)  1  1   6207.909776984863   4150.721695989062   1.319E-15     
+   7)  0  2   7427.928456764309   5370.740375768508   1.604E-14  OT  2v_2
+   8)  2  1   7462.493456144390   5405.305375148589   2.803E-15     
+   9)  4  0   7501.108876916383   5443.920795920582   6.754E-14  OT  4v_1
+  10)  1  2   8868.150955363322   6810.962874367521   3.323E-13     
+  11)  3  1   8872.452035362287   6815.263954366485   3.557E-13     
+  12)  0  3   9787.649803828546   7730.461722832745   2.186E-13  OT  3v_2
+  13)  2  2  10122.709770311174   8065.521689315373   5.022E-12     
+  14)  5  0  10147.547164395986   8090.359083400185   9.608E-14  OT  5v_1
+  15)  4  1  10211.435428336623   8154.247347340822   6.607E-13     
+  16)  1  3  11227.812807381573   9170.624726385773   7.478E-12     
+  17)  0  4  11468.626083127294   9411.438002131494   2.640E-11  OT  4v_2
+  18)  3  2  11532.667892554344   9475.479811558544   1.987E-11     
+  19)  6  0  12000.164314643598   9942.976233647798   2.135E-11  OT  6v_1
+  20)  2  3  12482.344628209088  10425.156547213286   7.788E-11     
+
+ node 3: finished on 7/21/2026 at 13:23:14
+
+
+ Section:                                    Min time       Max time       Ave time
+  ModeComb module                    :          0.001          0.001          0.001
+  HamilSetup module                  :          0.891          0.891          0.891
+  ModeH module                       :          0.000          0.000          0.000
+  Guess module                       :          0.000          0.000          0.000
+  Solver module                      :          0.030          0.030          0.030
+  * Solver module (iterations)       :          0.020          0.020          0.020
+  * Solver CP8 module (iterations)   :          0.000          0.000          0.000
+  * BlockUtils module (Orthog.)      :          0.002          0.002          0.002
+  * BlockUtils module (Q^T H Q)      :          0.004          0.004          0.004
+  * BlockUtils module (Overlaps)     :          0.002          0.002          0.002
+  * BlockUtils module (Updates)      :          0.002          0.002          0.002
+  Analyzer module                    :          0.003          0.003          0.003
+  Updater module                     :          0.002          0.002          0.002
+
+ Routine:                                    Min time       Max time       Ave time
+  LAPACK eigenvalue calculation      :          0.000          0.000          0.000
+  MODVECVEC: inner products          :          0.005          0.005          0.005
+  MODVECVEC: vector summation        :          0.000          0.000          0.000
+  MODVECVEC: normalization           :          0.001          0.001          0.001
+  CPMM matrix mult                   :          0.005          0.005          0.005
+  CPMM-vec matrix mult               :          0.000          0.000          0.000
+  CPMM reshift                       :          0.000          0.000          0.000
+  Reduction                          :          0.013          0.013          0.013
+  ALSPOW     iterations              :          0.000          0.000          0.000
+  PRODHV_ALS iterations              :          0.000          0.000          0.000
+  ALS orthogonalization              :          0.000          0.000          0.000
+  ALS vector summation               :          0.000          0.000          0.000
+  ALS linear solver                  :          0.000          0.000          0.000
+  CPr8: sum+copy vectors             :          0.000          0.000          0.000
+  CPr8: CP8 MPI synchronization      :          0.000          0.000          0.000
+  CPMM8: matrix multiplication       :          0.000          0.000          0.000
+  CPVV8: dot products                :          0.000          0.000          0.000
+  CPVV8: normalization               :          0.000          0.000          0.000
+  CPLS8:  left-hand sides            :          0.000          0.000          0.000
+  CPLS8: right-hand sides            :          0.000          0.000          0.000
+  CPLS8: copy LS solution            :          0.000          0.000          0.000
+  CPLS8: prepare G vector            :          0.000          0.000          0.000
+  LinAlg8: solve LU-decomp           :          0.000          0.000          0.000
+  Munkres: making assignments        :          0.000          0.000          0.000
+
+ MLCP total CPU run time (s)                          0.929
+
+ MLCP finished on 7/21/2026 at 13:23:14
+
