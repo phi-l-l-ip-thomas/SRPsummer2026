@@ -39,8 +39,6 @@ podman-hpc migrate working # If needed, for HPC centers
 
 ### Usage
 
-The updated pipeline assumes a heterogenous Slurm approach, compartmentalizing each step into individual Slurm job submissions. Particularly, `PBQFF` (and related processes) are run as a CPU-only Slurm job, while `NWChem`, `MLCP`, and other operations are run as idvididual, step-dependent GPU-only Slurm jobs. This multi-step process is staged and checkpointed via a light control script `scripts/checkpoint.sh`.
-
 This entire `interface` directory gets mounted into the container, so users can 
 simply add/create/modify files within the interface directory for pipeline use.
 
@@ -87,25 +85,54 @@ of a shared geometry input) is simply a complete input file for running standalo
 with package. Each section is copied directly into individual input files, allowing users to 
 fully tune all available parameters granted by each standalone component.
 
-2) Provide your system vars
+2) Edit your job files
 
-The pipeline organizes its files by system name (allowing for users to run multiple independent simulations within the "same" directory). In `inputs/system.vars`, provide a name for your system and an absolute path to your master input file as shown:
+The pipeline can be called by
 
 ```bash
-export INPUT=$"/parent/of/pipeline/interface/inputs/sample.inp"
-export SYS_NAME=$"h2o"
+/workspace/scripts/pipeline.sh <input file path> <system name of choice>
+
+# example
+/workspace/scripts/pipeline.sh /workspace/inputs/sample.inp h2o
 ```
 
-3) Run the pipeline
+updating the names as needed when you call the pipeline.
 
-For Slurm-based HPC systems:
+If you're running these calculations locally, the commands above are minimally sufficient.
+If you're planning on submitting jobs through Slurm, edit the entrypoint bash script(s)
+`scripts/entrypoint*.sh` as desired.
+
+`scripts/entrypoint_it.sh` automatically runs a quick example simulation with water and
+opens an interactive bash terminal for calling the pipeline.
+
+`scripts/entrypoint_batch.sh` is designed for submitting your system as a batch job.
+It also automatically runs the test simulation, but should be modified to include jobs of choice:
 
 ```bash
-scrontab slurm_jobs/control.slurm
+conda run -n base /workspace/scripts/pipeline_test.sh /workspace/inputs/sample.inp h2o
+/workspace/scripts/pipeline.sh <choice input> <choice system>
 ```
 
-For local pipeline usage:
+Queueing independent jobs in series is also supported
 
 ```bash
-scripts/checkpoint.sh
-``` 
+conda run -n base /workspace/scripts/pipeline_test.sh /workspace/inputs/sample.inp h2o
+/workspace/scripts/pipeline.sh <input 1> <system 1>
+/workspace/scripts/pipeline.sh <input 2> <system 2>
+/workspace/scripts/pipeline.sh <input 3> <system 3>
+/workspace/scripts/pipeline.sh <input 4> <system 4>
+```
+
+3) Run the container
+
+- Running local interactive session
+
+```bash
+podman-hpc run --rm -it --gpu -v "$PWD":/workspace --entrypoint="/workspace/scripts/entrypoint_it.sh" working
+```
+
+- Slurm job (batch)
+
+```bash
+sbatch slurm_jobs/mlcp_it.slurm
+```
