@@ -29,16 +29,24 @@ mkdir nwchem
 mkdir mlcp
 
 # Submit PBQFF to CPU
-echo 'Running MLCP pipeline (CPU)...'
-cpu_jobid=$(sbatch --parsable ../../slurm_jobs/cpu_job.slurm)
-echo "Submitted pbqff (CPU) job: $cpu_jobid"
+echo 'Running MLCP pipeline...'
+pbqff_jobid=$(sbatch --parsable ../../slurm_jobs/pbqff.slurm)
+echo "Submitted pbqff job: $pbqff_jobid"
 
 # Submit rest to GPU (successful PBQFF)
-echo 'Running MLCP pipeline (GPU)...'
-gpu_jobid=$(sbatch --parsable \
-                   --dependency=afterok:$cpu_jobid \
+nwchem_jobid=$(sbatch --parsable \
+                   --dependency=afterok:$pbqff_jobid \
                    --kill-on-invalid-dep=yes \
-                   --dependency=afterok:$cpu_jobid \
+                   --dependency=afterok:$pbqff_jobid \
                    --kill-on-invalid-dep=yes \
-                   ../../slurm_jobs/gpu_job.slurm)
-echo "Submitted GPU job: $gpu_jobid (afterok:$cpu_jobid)"
+                   ../../slurm_jobs/nwchem.slurm)
+echo "Submitted NWChem job: $nwchem_jobid (afterok:$pbqff_jobid)"
+
+# Submit rest to GPU (successful PBQFF)
+mlcp_jobid=$(sbatch --parsable \
+                   --dependency=afterok:$nwchem_jobid \
+                   --kill-on-invalid-dep=yes \
+                   --dependency=afterok:$nwchem_jobid \
+                   --kill-on-invalid-dep=yes \
+                   ../../slurm_jobs/mlcp.slurm)
+echo "Submitted MLCP job: $mlcp_jobid (afterok:$nwchem_jobid)"
