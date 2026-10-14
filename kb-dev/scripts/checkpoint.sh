@@ -18,6 +18,7 @@ source system.vars
 
 cleanup() {
     echo "Cleaning up..."
+    date -u
     cp -R ${MLCPPIPE}/simulations/* ${WORKING}/simulations/
     echo "MLCP Pipe closing"
 }
@@ -86,7 +87,7 @@ step1_setup() {
 step2_submit_pbqff() {
     echo "Submitting pbqff..."
     cd ${MLCPPIPE}
-    PBQFF_JOBID=$(sbatch -A "$PROJ" --export=NONE --parsable ${MLCPPIPE}/slurm_jobs/pbqff.slurm)
+    PBQFF_JOBID=$(sbatch -A ${PROJ} --parsable ${MLCPPIPE}/slurm_jobs/pbqff.slurm)
     echo "PBQFF_JOBID=$PBQFF_JOBID" >> "${MLCPPIPE}/simulations/${SYS_NAME}/jobids"
     echo 'export JOBIDS="simulations/${SYS_NAME}/jobids"' >> ${SYSTEM_VARS_PATH}
 
@@ -105,6 +106,7 @@ step3_submit_nwchem() {
 
     wait_for_job "$NWCHEM_JOBID"
 
+    echo "NWChem job completed. Running NWChem post-processing..."
     podman-hpc exec pipe /workspace/scripts/post_nwchem.sh
 }
 
@@ -144,7 +146,8 @@ if [[ "${1:-}" == "-r" || "${1:-}" == "--reset" ]]; then
 fi
 
 echo "Starting container..."
-podman-hpc run --userns=keep-id -d --replace --rm -v "$PWD":/workspace --name=pipe --entrypoint="" working sleep infinity
+date -u
+podman-hpc run --userns=keep-id -d --replace --rm -v "${MLCPPIPE}":/workspace --name=pipe --entrypoint="" working sleep infinity
 
 echo "Starting MLCP Pipe..."
 run_step 1 "setup" step1_setup

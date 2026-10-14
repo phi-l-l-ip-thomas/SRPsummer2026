@@ -1,0 +1,88 @@
+# System Name
+system_name = EO
+
+# Geometry
+    O    0.000000    0.000000    0.783600
+    C    0.000000    0.730500   -0.418400
+    C    0.000000   -0.730500   -0.418400
+    H    0.920200    1.233800   -0.732300
+    H   -0.920200    1.233800   -0.732300
+    H   -0.920200   -1.233800   -0.732300
+    H    0.920200   -1.233800   -0.732300
+--
+
+# PBQFF Input
+charge = 0
+optimize = true
+coord_type = "normal"
+findiff = false
+step_size = 0.005
+program = "mopac"
+queue = "local"
+template = "scfcrt=1.D-21 aux(precision=14 comp xp xs xw) PM7 THREADS=1"
+job_limit = 128
+chunk_size = 8
+sleep_int = 2
+check_int = 50
+-- 
+
+# Intder.in
+
+--
+
+# NWChem Input
+BASIS
+ C library 6-31g*
+ H library 6-31g*
+ O library 6-31g*
+END  
+SCF  
+ xc b3lyp
+ PRINT low  
+END
+TASK scf optimize
+SCF; PRINT none; END
+TASK scf freq
+--
+
+# MLCP Input
+# Control section: system designation and default solver settings
+
+$control
+system='EthOx' ncycle='0' psirank='120' psinals='1'
+rs='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 2 2022 20 21 13 0'
+$end-control
+
+# Resort section: desired order of modes on layer 1, to allow
+# arbitrary mode-combination schemes. The numbers entered in
+# the basis and layers sections apply to the resorted order
+
+$resort
+15  5 12  6 13  1  9  2 10  3  8  7 14  4 11
+$end-resort
+
+# Basis section: number of basis functions per DOF/mode
+# first line: primitive basis for individual DOFs
+# subsequent lines: basis for modes which combine DOFs
+
+$basis
+40 30 30 20 20 30 20 20 20 30 20 20 20 20 20
+20 19 19 11 11 12 11  8 14 14 11 10 10 10 10
+20  361   121   132   112   154   100   100
+20   78    76    77    68    74    79    79
+  128        128         128         128
+200
+$end-basis
+
+# Layers section: number of DOFs/modes to combine from previous layer
+# The first (primitive basis) layer is implied, with 1,1,...,1, so
+# input begins with the second layer
+
+$layers
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1  2   2   2   2   2   2   2
+1  1   1   1   1   1   1   1
+  2      2       2       2
+4
+$end-layers
+--

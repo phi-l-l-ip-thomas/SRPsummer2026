@@ -13,6 +13,8 @@ elif [[ ! -f f*{SYS_NAME}.dat ]]; then
     pbqff -o ${SYS_NAME}.toml
 fi
 
-conda run -n base /workspace/scripts/qfflist2.py pbqff.out ${SYS_NAME}
+mopac ${SYS_NAME}.mop
+mv ${SYS_NAME}.out mopac.out
+conda run -n base /workspace/scripts/pbqff_fc.py pbqff.out ${SYS_NAME}
 
 echo "CPU step complete."

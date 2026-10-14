@@ -15,7 +15,7 @@ def read_nwc_nmodes(nm):
     return nwc_freqs, nwc_nmodes.T
 
 def read_pbqff_nmodes(nm):
-    with open(f"../pbqff/pbqff2_nmodes_{nm}.dat", 'r') as pbqff2file :
+    with open(f"../pbqff/mopac_nmodes_{nm}.dat", 'r') as pbqff2file :
         pbqff2_freqs = []
         pbqff2_nmodes = []
         for line in pbqff2file :
@@ -152,6 +152,7 @@ def map_nwc_to_pbqff(nwc_points, pbqff_points, nwc_freqs, nwc_nmodes, pbqff_nmod
 
 # Execute data processing
 # $translation.py <system name>
+print(f"Running translation.py...")
 nwc_freqs, nwc_nmodes = read_nwc_nmodes(sys.argv[1])
 pbqff2_freqs, pbqff2_nmodes = read_pbqff_nmodes(sys.argv[1])
 

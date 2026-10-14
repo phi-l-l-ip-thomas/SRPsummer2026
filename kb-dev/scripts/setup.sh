@@ -28,5 +28,8 @@ echo "Processing inputs..."
 ${MLCPPIPE}/scripts/input.py ${INPUT}
 mv ${SYS_NAME}.toml pbqff/${SYS_NAME}.toml
 mv intder.in pbqff
+mv ${SYS_NAME}.mop pbqff
 mv ${SYS_NAME}.nw nwchem
 mv mlcp_${SYS_NAME}.inp mlcp
+
+chmod -R a+r .

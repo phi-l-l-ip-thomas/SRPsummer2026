@@ -82,6 +82,12 @@ def generate_pbqff_input(params) :
     with open(f'./intder.in', 'w') as intder :
         intder.write(params['intder.in'])
 
+# Generate MOPAC input file
+def generate_mopac_input(params) :
+    print('Generating MOPAC input file')
+    system_name = params['system_name']
+    with open(f'./{system_name}.mop', 'w') as mop :
+        mop.write(f"PM7 FORCE LET LARGE\n\n\n{params['geometry']}\n")
 
 # Generate NWChem input file
 def generate_nwc_input(params) :
@@ -101,5 +107,6 @@ def generate_mlcp_input(params) :
 # Execute file generation
 params = read_input(sys.argv[1])
 generate_pbqff_input(params)
+generate_mopac_input(params)
 generate_nwc_input(params)
 generate_mlcp_input(params)

@@ -17,4 +17,7 @@ export RAYON_NUM_THREADS=128
 #run the application: 
 # applications may perform better with --gpu-bind=none instead of --gpu-bind=single:1
 # srun -n 1 -c 256 --cpu_bind=cores 
-podman-hpc run --userns=keep-id --rm -v "$PWD":/workspace --entrypoint="/workspace/scripts/pbqff.sh" working
+source system.vars
+cd ${MLCPPIPE}
+
+podman-hpc run --userns=keep-id --rm -v "${MLCPPIPE}":/workspace --entrypoint="/workspace/scripts/pbqff.sh" working

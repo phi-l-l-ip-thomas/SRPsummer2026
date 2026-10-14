@@ -21,7 +21,7 @@ RUN cd mopac && \
     # activate micromamba env + install numpy (and other python modules)
     cmake .. -DPython3_EXECUTABLE=/opt/miniconda3/bin/python && \
     make
-ENV PATH=/opt/mopac/build:${PATH}
+ENV PATH=/opt/mopac:${PATH}
 
 # Resolve queuing issue with exec location
 RUN mv /opt/mopac/build/mopac /opt/mopac
